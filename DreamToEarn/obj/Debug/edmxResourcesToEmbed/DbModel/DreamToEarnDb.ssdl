@@ -1,0 +1,358 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DreamToEarnModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="ads">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="adURL" Type="varchar" MaxLength="1000" />
+    <Property Name="addeddate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Commission">
+    <Key>
+      <PropertyRef Name="ComId" />
+    </Key>
+    <Property Name="ComId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="planId" Type="int" Nullable="false" />
+    <Property Name="UserId" Type="int" Nullable="false" />
+    <Property Name="TotalCommission" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="ComDate" Type="datetime" />
+    <Property Name="IsApproved" Type="bit" />
+    <Property Name="CommissionPercentage" Type="int" />
+  </EntityType>
+  <EntityType Name="DrawAmount">
+    <Key>
+      <PropertyRef Name="drawId" />
+    </Key>
+    <Property Name="drawId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="totalDraw" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="totalEarningOnDraw" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="drawDate" Type="datetime" />
+    <Property Name="OTPTokens" Type="varchar" MaxLength="50" />
+    <Property Name="drawStatus" Type="bit" />
+    <Property Name="isAdminApprove" Type="bit" />
+    <Property Name="Deductions" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="drawSentByExchanger" Type="bit" />
+    <Property Name="DrawType" Type="varchar" MaxLength="50" />
+    <Property Name="DrawSentDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="DrawsDays">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstDay" Type="int" />
+    <Property Name="SecondDay" Type="int" />
+    <Property Name="ThirdDay" Type="int" />
+    <Property Name="ForthDay" Type="int" />
+  </EntityType>
+  <EntityType Name="EarningTranfer">
+    <Key>
+      <PropertyRef Name="TransferId" />
+    </Key>
+    <Property Name="TransferId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TransferAmount" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="TranferByUserId" Type="int" Nullable="false" />
+    <Property Name="TransFerToUserId" Type="int" Nullable="false" />
+    <Property Name="TotalEarningOnTransfer" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="TransferDate" Type="datetime" Nullable="false" />
+    <Property Name="Comments" Type="varchar" MaxLength="250" />
+    <Property Name="TransactionToken" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="InvestmentPlan">
+    <Key>
+      <PropertyRef Name="planId" />
+    </Key>
+    <Property Name="planId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="plan" Type="varchar" MaxLength="50" />
+    <Property Name="planType" Type="varchar" MaxLength="50" />
+    <Property Name="planAddDate" Type="datetime" />
+    <Property Name="planActiveDate" Type="datetime" />
+    <Property Name="planStatus" Type="varchar" MaxLength="50" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="TotalEarnings" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="InvestPercentage" Type="int" />
+    <Property Name="IsActive" Type="bit" />
+    <Property Name="Commission" Type="decimal" Precision="18" Scale="0" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="UserName" />
+    </Key>
+    <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserName" Type="varchar" MaxLength="255" Nullable="false" />
+    <Property Name="FirstName" Type="varchar" MaxLength="300" />
+    <Property Name="LastName" Type="varchar" MaxLength="300" />
+    <Property Name="Email" Type="varchar" MaxLength="500" />
+    <Property Name="Password" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="RefUserId" Type="int" />
+    <Property Name="Role" Type="int" />
+    <Property Name="firstLoginToken" Type="varchar" MaxLength="255" />
+    <Property Name="firstLogin" Type="bit" />
+    <Property Name="TransactionToken" Type="varchar" MaxLength="600" />
+    <Property Name="SuperAdmin" Type="bit" />
+    <Property Name="TotalCommissions" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="UserAddress" Type="varchar" MaxLength="255" />
+    <Property Name="Mobile" Type="varchar" MaxLength="50" />
+    <Property Name="BankAccount" Type="varchar" MaxLength="200" />
+    <Property Name="JazzCash" Type="varchar" MaxLength="200" />
+    <Property Name="EasyPaisa" Type="varchar" MaxLength="200" />
+    <Property Name="BankTitle" Type="varchar" MaxLength="200" />
+  </EntityType>
+  <EntityType Name="UsersAds">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="adId" Type="int" Nullable="false" />
+    <Property Name="IsViewed" Type="bit" />
+    <Property Name="UserId" Type="int" Nullable="false" />
+    <Property Name="forDate" Type="datetime" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'DreamToEarn.dbo.CommReferrer' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="CommReferrer">
+    <Key>
+      <PropertyRef Name="UserId" />
+      <PropertyRef Name="UserName" />
+      <PropertyRef Name="Password" />
+    </Key>
+    <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserName" Type="varchar" MaxLength="255" Nullable="false" />
+    <Property Name="FirstName" Type="varchar" MaxLength="300" />
+    <Property Name="LastName" Type="varchar" MaxLength="300" />
+    <Property Name="Email" Type="varchar" MaxLength="500" />
+    <Property Name="Password" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="RefUserId" Type="int" />
+    <Property Name="Role" Type="int" />
+    <Property Name="firstLoginToken" Type="varchar" MaxLength="255" />
+    <Property Name="firstLogin" Type="bit" />
+    <Property Name="TransactionToken" Type="varchar" MaxLength="600" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'DreamToEarn.dbo.Team' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="Team">
+    <Key>
+      <PropertyRef Name="UserId" />
+      <PropertyRef Name="UserName" />
+      <PropertyRef Name="Plan" />
+      <PropertyRef Name="planType" />
+      <PropertyRef Name="PlanStatus" />
+    </Key>
+    <Property Name="UserId" Type="int" Nullable="false" />
+    <Property Name="UserName" Type="varchar" MaxLength="255" Nullable="false" />
+    <Property Name="FirstName" Type="varchar" MaxLength="300" />
+    <Property Name="LastName" Type="varchar" MaxLength="300" />
+    <Property Name="Email" Type="varchar" MaxLength="500" />
+    <Property Name="RefUserId" Type="int" />
+    <Property Name="Role" Type="int" />
+    <Property Name="IsActive" Type="bit" />
+    <Property Name="Plan" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="planType" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="planAddDate" Type="datetime" />
+    <Property Name="planActiveDate" Type="datetime" />
+    <Property Name="PlanStatus" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="ReferencedBy" Type="varchar" MaxLength="859" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'DreamToEarn.dbo.UsersCommissions' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="UsersCommissions">
+    <Key>
+      <PropertyRef Name="ComId" />
+      <PropertyRef Name="UserId" />
+      <PropertyRef Name="UserName" />
+      <PropertyRef Name="CommissionPercentage" />
+      <PropertyRef Name="IsApproved" />
+    </Key>
+    <Property Name="ComId" Type="int" Nullable="false" />
+    <Property Name="UserId" Type="int" Nullable="false" />
+    <Property Name="UserName" Type="varchar" MaxLength="255" Nullable="false" />
+    <Property Name="FirstName" Type="varchar" MaxLength="300" />
+    <Property Name="LastName" Type="varchar" MaxLength="300" />
+    <Property Name="Email" Type="varchar" MaxLength="500" />
+    <Property Name="TotalCommission" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="CommissionOnPlan" Type="varchar" MaxLength="50" />
+    <Property Name="ComDate" Type="datetime" />
+    <Property Name="CommissionPercentage" Type="int" Nullable="false" />
+    <Property Name="IsApproved" Type="bit" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'DreamToEarn.dbo.UsersDetail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="UsersDetail">
+    <Key>
+      <PropertyRef Name="planId" />
+      <PropertyRef Name="UserId" />
+      <PropertyRef Name="UserName" />
+      <PropertyRef Name="TotalEarnings" />
+      <PropertyRef Name="InvestPercentage" />
+    </Key>
+    <Property Name="planId" Type="int" Nullable="false" />
+    <Property Name="UserId" Type="int" Nullable="false" />
+    <Property Name="UserName" Type="varchar" MaxLength="255" Nullable="false" />
+    <Property Name="FirstName" Type="varchar" MaxLength="300" />
+    <Property Name="LastName" Type="varchar" MaxLength="300" />
+    <Property Name="Email" Type="varchar" MaxLength="500" />
+    <Property Name="RefUserId" Type="int" />
+    <Property Name="Role" Type="int" />
+    <Property Name="plan" Type="varchar" MaxLength="50" />
+    <Property Name="planType" Type="varchar" MaxLength="50" />
+    <Property Name="planAddDate" Type="datetime" />
+    <Property Name="planActiveDate" Type="datetime" />
+    <Property Name="planStatus" Type="varchar" MaxLength="50" />
+    <Property Name="TotalEarnings" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+    <Property Name="InvestPercentage" Type="int" Nullable="false" />
+    <Property Name="TransactionToken" Type="varchar" MaxLength="600" />
+    <Property Name="IsActive" Type="bit" />
+    <Property Name="ReferencedBy" Type="varchar" MaxLength="859" />
+    <Property Name="TotalCommissionsx" Type="decimal" Precision="21" Scale="2" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'DreamToEarn.dbo.UsersWithdraws' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="UsersWithdraws">
+    <Key>
+      <PropertyRef Name="drawID" />
+      <PropertyRef Name="UserName" />
+      <PropertyRef Name="Deductions" />
+      <PropertyRef Name="drawSentByExchanger" />
+      <PropertyRef Name="DrawType" />
+    </Key>
+    <Property Name="drawID" Type="int" Nullable="false" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="UserName" Type="varchar" MaxLength="255" Nullable="false" />
+    <Property Name="BankAccount" Type="varchar" MaxLength="200" />
+    <Property Name="BankTitle" Type="varchar" MaxLength="200" />
+    <Property Name="EasyPaisa" Type="varchar" MaxLength="200" />
+    <Property Name="JazzCash" Type="varchar" MaxLength="200" />
+    <Property Name="LastName" Type="varchar" MaxLength="300" />
+    <Property Name="FirstName" Type="varchar" MaxLength="300" />
+    <Property Name="totalDraw" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="totalEarningOnDraw" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="Deductions" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="drawDate" Type="datetime" />
+    <Property Name="drawStatus" Type="bit" />
+    <Property Name="isAdminApprove" Type="bit" />
+    <Property Name="drawSentByExchanger" Type="bit" Nullable="false" />
+    <Property Name="DrawType" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="DrawSentDate" Type="datetime" />
+  </EntityType>
+  <Association Name="FK_InvestmentPlan_InvestmentPlan">
+    <End Role="InvestmentPlan" Type="Self.InvestmentPlan" Multiplicity="1" />
+    <End Role="InvestmentPlan1" Type="Self.InvestmentPlan" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="InvestmentPlan">
+        <PropertyRef Name="planId" />
+      </Principal>
+      <Dependent Role="InvestmentPlan1">
+        <PropertyRef Name="planId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DreamToEarnModelStoreContainer">
+    <EntitySet Name="ads" EntityType="Self.ads" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Commission" EntityType="Self.Commission" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DrawAmount" EntityType="Self.DrawAmount" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DrawsDays" EntityType="Self.DrawsDays" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="EarningTranfer" EntityType="Self.EarningTranfer" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="InvestmentPlan" EntityType="Self.InvestmentPlan" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UsersAds" EntityType="Self.UsersAds" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CommReferrer" EntityType="Self.CommReferrer" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [CommReferrer].[UserId] AS [UserId], 
+    [CommReferrer].[UserName] AS [UserName], 
+    [CommReferrer].[FirstName] AS [FirstName], 
+    [CommReferrer].[LastName] AS [LastName], 
+    [CommReferrer].[Email] AS [Email], 
+    [CommReferrer].[Password] AS [Password], 
+    [CommReferrer].[RefUserId] AS [RefUserId], 
+    [CommReferrer].[Role] AS [Role], 
+    [CommReferrer].[firstLoginToken] AS [firstLoginToken], 
+    [CommReferrer].[firstLogin] AS [firstLogin], 
+    [CommReferrer].[TransactionToken] AS [TransactionToken]
+    FROM [dbo].[CommReferrer] AS [CommReferrer]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="Team" EntityType="Self.Team" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [Team].[UserId] AS [UserId], 
+    [Team].[UserName] AS [UserName], 
+    [Team].[FirstName] AS [FirstName], 
+    [Team].[LastName] AS [LastName], 
+    [Team].[Email] AS [Email], 
+    [Team].[RefUserId] AS [RefUserId], 
+    [Team].[Role] AS [Role], 
+    [Team].[IsActive] AS [IsActive], 
+    [Team].[Plan] AS [Plan], 
+    [Team].[planType] AS [planType], 
+    [Team].[planAddDate] AS [planAddDate], 
+    [Team].[planActiveDate] AS [planActiveDate], 
+    [Team].[PlanStatus] AS [PlanStatus], 
+    [Team].[ReferencedBy] AS [ReferencedBy]
+    FROM [dbo].[Team] AS [Team]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="UsersCommissions" EntityType="Self.UsersCommissions" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [UsersCommissions].[ComId] AS [ComId], 
+    [UsersCommissions].[UserId] AS [UserId], 
+    [UsersCommissions].[UserName] AS [UserName], 
+    [UsersCommissions].[FirstName] AS [FirstName], 
+    [UsersCommissions].[LastName] AS [LastName], 
+    [UsersCommissions].[Email] AS [Email], 
+    [UsersCommissions].[TotalCommission] AS [TotalCommission], 
+    [UsersCommissions].[CommissionOnPlan] AS [CommissionOnPlan], 
+    [UsersCommissions].[ComDate] AS [ComDate], 
+    [UsersCommissions].[CommissionPercentage] AS [CommissionPercentage], 
+    [UsersCommissions].[IsApproved] AS [IsApproved]
+    FROM [dbo].[UsersCommissions] AS [UsersCommissions]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="UsersDetail" EntityType="Self.UsersDetail" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [UsersDetail].[planId] AS [planId], 
+    [UsersDetail].[UserId] AS [UserId], 
+    [UsersDetail].[UserName] AS [UserName], 
+    [UsersDetail].[FirstName] AS [FirstName], 
+    [UsersDetail].[LastName] AS [LastName], 
+    [UsersDetail].[Email] AS [Email], 
+    [UsersDetail].[RefUserId] AS [RefUserId], 
+    [UsersDetail].[Role] AS [Role], 
+    [UsersDetail].[plan] AS [plan], 
+    [UsersDetail].[planType] AS [planType], 
+    [UsersDetail].[planAddDate] AS [planAddDate], 
+    [UsersDetail].[planActiveDate] AS [planActiveDate], 
+    [UsersDetail].[planStatus] AS [planStatus], 
+    [UsersDetail].[TotalEarnings] AS [TotalEarnings], 
+    [UsersDetail].[InvestPercentage] AS [InvestPercentage], 
+    [UsersDetail].[TransactionToken] AS [TransactionToken], 
+    [UsersDetail].[IsActive] AS [IsActive], 
+    [UsersDetail].[ReferencedBy] AS [ReferencedBy], 
+    [UsersDetail].[TotalCommissionsx] AS [TotalCommissionsx]
+    FROM [dbo].[UsersDetail] AS [UsersDetail]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="UsersWithdraws" EntityType="Self.UsersWithdraws" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [UsersWithdraws].[drawID] AS [drawID], 
+    [UsersWithdraws].[UserId] AS [UserId], 
+    [UsersWithdraws].[UserName] AS [UserName], 
+    [UsersWithdraws].[BankAccount] AS [BankAccount], 
+    [UsersWithdraws].[BankTitle] AS [BankTitle], 
+    [UsersWithdraws].[EasyPaisa] AS [EasyPaisa], 
+    [UsersWithdraws].[JazzCash] AS [JazzCash], 
+    [UsersWithdraws].[LastName] AS [LastName], 
+    [UsersWithdraws].[FirstName] AS [FirstName], 
+    [UsersWithdraws].[totalDraw] AS [totalDraw], 
+    [UsersWithdraws].[totalEarningOnDraw] AS [totalEarningOnDraw], 
+    [UsersWithdraws].[Deductions] AS [Deductions], 
+    [UsersWithdraws].[drawDate] AS [drawDate], 
+    [UsersWithdraws].[drawStatus] AS [drawStatus], 
+    [UsersWithdraws].[isAdminApprove] AS [isAdminApprove], 
+    [UsersWithdraws].[drawSentByExchanger] AS [drawSentByExchanger], 
+    [UsersWithdraws].[DrawType] AS [DrawType], 
+    [UsersWithdraws].[DrawSentDate] AS [DrawSentDate]
+    FROM [dbo].[UsersWithdraws] AS [UsersWithdraws]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK_InvestmentPlan_InvestmentPlan" Association="Self.FK_InvestmentPlan_InvestmentPlan">
+      <End Role="InvestmentPlan" EntitySet="InvestmentPlan" />
+      <End Role="InvestmentPlan1" EntitySet="InvestmentPlan" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

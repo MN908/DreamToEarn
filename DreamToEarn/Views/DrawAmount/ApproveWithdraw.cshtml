@@ -1,0 +1,204 @@
+﻿@model IEnumerable<DreamToEarn.DbModel.UsersWithdraw>
+
+@using System.Security.Claims;
+@using DreamToEarn.Helper;
+@{
+    var user = new AppUser(User as ClaimsPrincipal);
+
+    if (Session["SiteSessions"] == null)
+    {
+        Response.Redirect("/Account/Login");
+        Response.End();
+    }
+}
+
+@{
+    ViewBag.Title = "Approve Withdraw";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table mr-1"></i>
+        View / Approve Withdraw
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>User Name</th>
+                        <th>Total Balance On Draw</th>
+                        <th>Total Withdraw</th>
+                        <th>Total Deductions</th>
+                        <th>With Draw Date</th>
+                        <th>Draw Type</th>
+                        <th>Account</th>
+                        @if (user.IsInRole("1"))
+                        {
+                            <th>Action</th>
+
+                        }
+                        @if (user.IsInRole("3"))
+                        {
+                            <th>Action</th>
+
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @item.FirstName @item.LastName
+                            </td>
+                            <td>
+                                @item.UserName
+                            </td>
+                            <td>
+                                @item.totalEarningOnDraw /RS
+                            </td>
+                            <td>
+                                @item.totalDraw /RS
+                            </td>
+                            <td>
+                                @item.Deductions / RS
+                            </td>
+                            <td>
+                                @item.drawDate
+                            </td>
+                            <td>
+                                @item.DrawType
+                            </td>
+                            <td>
+                                @if (item.DrawType == "EasyPaisa")
+                                {
+                                    <span> @item.EasyPaisa</span>
+                                }
+                                @if (item.DrawType == "JazzCash")
+                                {
+                                    <span> @item.JazzCash</span>
+                                }
+                                @if (item.DrawType == "BankAccount")
+                                {
+                                    <span> @item.BankAccount -  @item.BankTitle</span>
+                                }
+                            </td>
+                            <td>
+                                @if (user.IsInRole("1"))
+                                {
+                                    if (item.isAdminApprove == true && item.drawSentByExchanger == true)
+                                    {
+                                        <span class="alert alert-success"> Approved</span>
+                                    }
+                                    else if (item.isAdminApprove == false && item.drawSentByExchanger == false)
+                                    {
+                                        <a href="" class="small text-danger" onclick="return approveWithdraw(@item.drawID, @item.UserId)">Approve this? </a>
+                                    }
+                                    else
+                                    {
+                                        <span class="alert alert-success"> Pending for Exchanger</span>
+                                    }
+                                }
+
+                                @if (user.IsInRole("3"))
+                                {
+                                    if (item.isAdminApprove == true && item.drawSentByExchanger == true)
+                                    {
+                                        <span class="alert alert-success"> All Approved</span>
+                                    }
+                                    else
+                                    {
+                                        <a href="" class="small text-danger" onclick="return approveExchangerWithdraw(@item.drawID, @item.UserId)">Approve this? </a>
+                                    }
+                                }
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="lblmsg"></div>
+<div id="snackbar"></div>
+<script>
+    function approveExchangerWithdraw(drawId, userID) {
+        if (!confirm('Are you sure you want to approve this withdraw?')) {
+            return false;
+        }
+            var url = '@Url.Action("ApproveExchangerWithdraw", "DrawAmount")';
+             $.ajax({
+                type: "POST",
+                 url: url,
+                 data: { drawId: drawId, UserId: userID },
+                success: function (result) {
+                    if (result.IsSuccess) {
+                        ShowMessage('success', result.Message);
+                        $("#lblmsg").removeClass("small text-danger");
+                        $("#lblmsg").addClass("smail text-success");
+                        document.getElementById('lblmsg').innerHTML = result.Message;
+                        $('#ddlPlan').val('');
+                        window.location.reload();
+                    }
+                    else {
+                        ShowMessage('', "NOTE: " + result.Message);
+                        $("#lblmsg").removeClass("small text-success");
+                        $("#lblmsg").addClass("smail text-danger");
+                        document.getElementById('lblmsg').innerHTML = "NOTE: " + result.Message;
+                    }
+                },
+                error: function (jqXHR, status, err) {
+                    ShowMessage('', "NOTE: " + result.Message);
+                    $("#lblmsg").removeClass("small text-success");
+                    $("#lblmsg").addClass("smail text-danger");
+                    document.getElementById('lblmsg').innerHTML = "NOTE: " + result.Message;
+                }
+            });
+    }
+    function approveWithdraw(drawId, userID) {
+        if (!confirm('Are you sure you want to approve this withdraw?')) {
+            return false;
+        }
+            var url = '@Url.Action("ApproveWithdraw", "DrawAmount")';
+             $.ajax({
+                type: "POST",
+                 url: url,
+                 data: { drawId: drawId, UserId: userID },
+                success: function (result) {
+                    if (result.IsSuccess) {
+                        ShowMessage('success', result.Message);
+                        $("#lblmsg").removeClass("small text-danger");
+                        $("#lblmsg").addClass("smail text-success");
+                        document.getElementById('lblmsg').innerHTML = result.Message;
+                        $('#ddlPlan').val('');
+                        window.location.reload();
+                    }
+                    else {
+                        ShowMessage('', "NOTE: " + result.Message);
+                        $("#lblmsg").removeClass("small text-success");
+                        $("#lblmsg").addClass("smail text-danger");
+                        document.getElementById('lblmsg').innerHTML = "NOTE: " + result.Message;
+                    }
+                },
+                error: function (jqXHR, status, err) {
+                    ShowMessage('', "NOTE: " + result.Message);
+                    $("#lblmsg").removeClass("small text-success");
+                    $("#lblmsg").addClass("smail text-danger");
+                    document.getElementById('lblmsg').innerHTML = "NOTE: " + result.Message;
+                }
+            });
+    }
+
+      function ShowMessage(type, message) {
+             var x = document.getElementById("snackbar");
+             x.className = "show";
+             x.innerHTML = message;
+              setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+        }
+</script>

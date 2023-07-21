@@ -1,0 +1,254 @@
+﻿@using DreamToEarn.Helper;
+@{
+    var UserName = ViewBag.QueryUserName;
+    var _UserId = ViewBag.RefUserID;
+    if (_UserId == 0)
+    {
+        UserName = "Admin";
+    }
+
+    ViewBag.Title = "Register";
+}
+
+
+<section id="SignUp" class="Login">
+    <div class="container" data-aos="fade-up">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous"></script>
+        <div class="section-title">                        
+            <main>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-7">
+                            <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                <div class="card-header"><h3 class="text-center font-weight-light my-4">Create Account</h3></div>
+                                <div class="card-body">
+                                    <form>
+                                        <div class="form-group">
+                                            <label class="small mb-1" for="RefUserName">Ref User Name</label>
+                                            <input class="form-control py-4" id="RefUserName" type="text" aria-describedby="emailHelp" placeholder="Reference User Name" disabled="disabled" value="@UserName" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="small mb-1" for="UserName">User Name</label>
+                                            <input class="form-control py-4" id="UserName" type="text" aria-describedby="emailHelp" placeholder="Enter Unique User Name" onblur="return CheckUserExist();" />
+                                            <div id="lblmsg"></div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="FirstName">First Name</label>
+                                                    <input class="form-control py-4" id="FirstName" type="text" placeholder="Enter first name" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="LastName">Last Name</label>
+                                                    <input class="form-control py-4" id="LastName" type="text" placeholder="Enter last name" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="small mb-1" for="EmailAddress">Email</label>
+                                            <input class="form-control py-4" id="EmailAddress" type="email" aria-describedby="emailHelp" placeholder="Enter email address" onblur="return CheckEmailExist();" />
+                                            <div id="lblmsgEmail"></div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="Password">Password</label>
+                                                    <input class="form-control py-4" id="Password" type="password" placeholder="Enter password" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="ConfirmPassword">Confirm Password</label>
+                                                    <input class="form-control py-4" id="ConfirmPassword" type="password" placeholder="Confirm password" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mt-4 mb-0"><a class="btn btn-primary btn-block" href="#" onclick="return RegisterUser();">Create Account</a></div>
+                                    </form>
+                                </div>
+                                <div class="card-footer text-center">
+                                    <div class="small"><a href="#">Have an account? Go to login</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="../js/scripts.js"></script>
+        <link href="../css/styles.css" rel="stylesheet" />
+    </div>
+    <div id="snackbar"></div>
+</section>
+
+    <script>
+        function CheckUserExist() {            
+            var url = '@Url.Action("CheckUserName", "Account")';
+            var UserName = $("#UserName").val();
+            if (UserName == "") {
+                ShowMessage("", "User Name can not be empty");
+                return;
+            }
+            var isSpace = UserName.split(' ');
+            if (isSpace.length > 1) {
+                ShowMessage("", "Please do not enter space in User Name, User Name should be one word.");
+                return false;
+            }
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: { UserName: UserName },
+                success: function (result) {
+                    if (result.IsSuccess) {
+                        ShowMessage('success', "User name available");
+                        $("#lblmsg").removeClass("smail text-danger"); 
+                        $("#lblmsg").addClass("small text-success"); 
+                        document.getElementById('lblmsg').innerHTML = "User name available";                        
+                        
+                    }
+                    else {
+                        ShowMessage('failed', "User name not available");
+                        $("#lblmsg").removeClass("small text-success"); 
+                        $("#lblmsg").addClass("smail text-danger");                        
+                        document.getElementById('lblmsg').innerHTML = "User name not available";
+                    }
+                },
+                error: function (jqXHR, status, err) {
+                    ShowMessage('', "Can't able to create user");
+                }
+            });
+        }
+
+        function CheckEmailExist() {            
+            var url = '@Url.Action("CheckEmailName", "Account")';
+            var EmailAddress = $("#EmailAddress").val();
+            if (EmailAddress == "") {
+                ShowMessage("", "Email Address can not be empty");
+                return;
+            }
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: { EmailAddress: EmailAddress },
+                success: function (result) {
+                    if (result.IsSuccess) {
+                        ShowMessage('success', "You can register using this email, email is not added yet.");
+                        $("#lblmsgEmail").removeClass("smail text-danger"); 
+                        $("#lblmsgEmail").addClass("small text-success"); 
+                        document.getElementById('lblmsgEmail').innerHTML = "You can register using this email, email is not added yet.";                        
+                        
+                    }
+                    else {
+                        ShowMessage('failed', "The Email address is already taken, try different or click Login");
+                        $("#lblmsgEmail").removeClass("small text-success"); 
+                        $("#lblmsgEmail").addClass("smail text-danger");                        
+                        document.getElementById('lblmsgEmail').innerHTML = "The Email address is already taken, try different or click Login";
+                        
+                    }
+                },
+                error: function (jqXHR, status, err) {
+                    ShowMessage('', "Can't able to create user");
+                }
+            });
+        }
+
+        function RegisterUser() {
+            var message = document.getElementById('lblmsg').innerHTML;
+            var message2 = document.getElementById('lblmsgEmail').innerHTML;
+            if (message == "User name not available") {
+                ShowMessage("", "Please Update User name, it is already exist");
+                return false;
+            }
+             if (message2 == "The Email address is already taken, try different or click Login") {
+                ShowMessage("", "Please change email address, it is already exist in database");
+                return false;
+            }
+            var userName = $("#UserName").val();
+            var isSpace = userName.split(' ');
+            if (isSpace.length > 1) {
+                ShowMessage("", "Please do not enter space in User Name, User Name should be one word.");
+                return false;
+            }
+            var firstName = $("#FirstName").val();
+            var lastName = $("#LastName").val();
+            var emailAddress = $("#EmailAddress").val();
+            var pass = $('#Password').val();
+            var confirmPass = $('#ConfirmPassword').val();
+
+            if (userName == "") {
+                ShowMessage("", "Please enter User Name");
+                return false;
+            }
+            if (firstName == "") {
+                ShowMessage("", "Please enter First Name");
+                return false;
+            }
+            if (lastName == "") {
+                ShowMessage("", "Please enter Last Name");
+                return false;
+            }
+            if (emailAddress == "") {
+                ShowMessage("", "Please enter Email Address");
+                return false;
+            }
+            if (pass == "") {
+                ShowMessage("", "Please enter your Password");
+                return false;
+            }
+
+            if (pass != confirmPass) {
+                //alert("The Confirm Password doest not match. Please retype");
+                ShowMessage("", "The Confirm Password doest not match. Please retype");
+                return false;
+            }
+            var url = '@Url.Action("Register", "Account")';
+            var modelObj = {
+                UserName: $("#UserName").val(),
+                FirstName: $("#FirstName").val(),
+                LastName: $("#LastName").val(),
+                EmailAddress: $("#EmailAddress").val(),
+                Password: $("#Password").val(),
+                RefUserId: @_UserId
+                //RefUserName: @UserName
+            };                                  
+
+             $.ajax({
+                type: "POST",
+                url: url,
+                data: {
+                    Register: modelObj
+                },
+                success: function (result) {
+                    if (result.IsSuccess) {                       
+                        ShowMessage('success', "User registration successfully");
+
+                        //$("#UserName").val('');
+                        //$("#FirstName").val('');
+                        //$("#LastName").val('');
+                        //$("#EmailAddress").val('');
+                        //$("#Password").val('');
+                        window.location = "/Account/Login";
+                    }
+                    else {                        
+                        ShowMessage('', "User registeration failed, please try with new different user name");
+                    }
+                },
+                error: function (jqXHR, status, err) {
+                    ShowMessage('', "Can't able to create user");
+                }
+            });
+        }
+        function ShowMessage(type, message) {            
+             var x = document.getElementById("snackbar");              
+             x.className = "show";
+             x.innerHTML = message;              
+              setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+        }
+    </script>
+}

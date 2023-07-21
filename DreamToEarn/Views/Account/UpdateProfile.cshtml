@@ -1,0 +1,175 @@
+﻿@using System.Security.Claims;
+@using DreamToEarn.Helper;
+@{
+    var user = new AppUser(User as ClaimsPrincipal);
+
+    if (Session["SiteSessions"] == null)
+    {
+        Response.Redirect("/Account/Login");
+        Response.End();
+    }
+}
+@{
+    ViewBag.Title = "Update Profile";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+<section>
+    <div>
+        <div class="card-header">
+            <i class="fas fa-table mr-1"></i>
+            Update Profile
+        </div>
+        <div class="container-fluid">
+            <div class="card-body">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="small mb-1" for="firstName">First Name</label>
+                            <input class="form-control py-4" id="firstName" type="text" placeholder="Enter First Name" value="@ViewBag.FirstName" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="small mb-1" for="lastName">Last Name</label>
+                            <input class="form-control py-4" id="lastName" type="text" placeholder="Enter Last Name" value="@ViewBag.LastName" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="small mb-1" for="Address">Address</label>
+                            <input class="form-control py-4" id="Address" type="text" placeholder="Enter Address" value="@ViewBag.Address" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="small mb-1" for="Mobile">Mobile No</label>
+                            <input class="form-control py-4" id="Mobile" type="text" placeholder="Enter Mobile No" value="@ViewBag.Mobile" />
+                        </div>
+                    </div>
+                    @*<div class="col-md-6">
+                            <div class="form-group">
+                                <label class="small mb-1" for="email">Email </label>
+                                <input class="form-control py-4" id="email" type="email" placeholder="Enter Email Address" value="@ViewBag.EmailAddress" />
+                            </div>
+                        </div>*@
+                </div>
+                <div class="form-row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="small mb-1" for="BankAccount">Bank Account</label>
+                            <input class="form-control py-4" id="BankAccount" type="text" placeholder="Enter Bank Account" value="@ViewBag.BankAccount" />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="small mb-1" for="BankTitle">Bank Title</label>
+                            <input class="form-control py-4" id="BankTitle" type="text" placeholder="Enter Bank Account" value="@ViewBag.BankTitle" />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="small mb-1" for="JazzCash">Jazz Cash</label>
+                            <input class="form-control py-4" id="JazzCash" type="text" placeholder="Enter Jazz Cash No" value="@ViewBag.JazzCash" />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="small mb-1" for="EasyPaisa">Easy Paisa</label>
+                            <input class="form-control py-4" id="EasyPaisa" type="text" placeholder="Enter Easy Paisa No" value="@ViewBag.EasyPaisa" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mt-4 mb-0"><a class="btn btn-primary btn-block" href="#" onclick="return UpdateProfile();" style="width:180px">Update Profile</a></div>
+                <div id="lblmsg"></div>
+            </div>
+        </div>
+    </div>
+    <div id="snackbar"></div>
+</section>
+
+<script>
+    function UpdateProfile() {
+            var lastName = $('#lastName').val();
+            var firstName = $('#firstName').val();
+            var address = $('#Address').val();
+            var mobile = $('#Mobile').val();
+            var BankAccount = $('#BankAccount').val();
+            var BankTitle = $('#BankTitle').val();
+            var JazzCash = $('#JazzCash').val();
+            var EasyPaisa = $('#EasyPaisa').val();
+
+            if (firstName == "") {
+                ShowMessage("", "Please enter First Name");
+                return false;
+            }
+            if (lastName == "") {
+                ShowMessage("", "Please enter Last Name");
+                return false;
+            }
+            if (address == "") {
+                ShowMessage("", "Please enter Address");
+                return false;
+            }
+            if (mobile == "") {
+                ShowMessage("", "Please enter Mobile number");
+                return false;
+            }
+            if (BankAccount != "" && BankTitle == "") {
+                ShowMessage("", "Please Enter Bank Title");
+                return false;
+            }
+            var url = '@Url.Action("UpdateProfile", "Account")';
+            var modelObj = {
+                FirstName: firstName,
+                LastName: lastName,
+                userId: @user.UserId,
+                Address: address,
+                Mobile: mobile,
+                BankAccount: BankAccount,
+                BankTitle: BankTitle,
+                JazzCash: JazzCash,
+                EasyPaisa: EasyPaisa
+            };
+
+             $.ajax({
+                type: "POST",
+                url: url,
+                data: {
+                    model: modelObj
+                },
+                success: function (result) {
+                    if (result.IsSuccess) {
+                         $("#lblmsg").removeClass("smail text-danger");
+                        $("#lblmsg").addClass("small text-success");
+                        document.getElementById('lblmsg').innerHTML = result.Message;
+                        ShowMessage('success', result.Message);
+                        //window.location.reload();
+                    }
+                    else {
+                        $("#lblmsg").removeClass("small text-success");
+                        $("#lblmsg").addClass("smail text-danger");
+                        document.getElementById('lblmsg').innerHTML = result.Message;
+                        ShowMessage('', result.Message);
+                    }
+                },
+                 error: function (jqXHR, status, err) {
+                        $("#lblmsg").removeClass("small text-success");
+                        $("#lblmsg").addClass("smail text-danger");
+                        document.getElementById('lblmsg').innerHTML = "Can't able to Update you profile, please try later";
+                        ShowMessage('', "Can't able to Update you profile, please try later");
+                }
+            });
+
+        }
+
+        function ShowMessage(type, message) {
+             var x = document.getElementById("snackbar");
+             x.className = "show";
+             x.innerHTML = message;
+              setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+        }
+</script>
+
+

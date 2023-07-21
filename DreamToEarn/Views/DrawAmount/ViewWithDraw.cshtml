@@ -1,0 +1,82 @@
+﻿@model IEnumerable<DreamToEarn.DbModel.UsersWithdraw>
+
+@using System.Security.Claims;
+@using DreamToEarn.Helper;
+@{
+    var user = new AppUser(User as ClaimsPrincipal);
+
+    if (Session["SiteSessions"] == null)
+    {
+        Response.Redirect("/Account/Login");
+        Response.End();
+    }
+}
+
+@{
+    ViewBag.Title = "Approve Withdraw";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table mr-1"></i>
+        View Withdraws
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Total Balance On Draw</th>
+                        <th>Total Withdraw</th>
+                        <th>Total Deductions</th>
+                        <th>With Draw Date</th>
+                        <th>Draw Type</th>
+                        <th>Draw Sent Date</th>
+                        <th>Status</th>                        
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @item.FirstName @item.LastName
+                            </td>
+                            <td>
+                                @item.totalEarningOnDraw /RS
+                            </td>
+                            <td>
+                                @item.totalDraw /RS
+                            </td>
+                            <td>
+                                @item.Deductions / RS
+                            </td>
+                            <td>
+                                @item.drawDate
+                            </td>
+                            <td>
+                                @item.DrawType
+                            </td>
+                            <td>
+                                @item.DrawSentDate
+                            </td>
+                            <td>
+                                @if (item.isAdminApprove == true && item.drawSentByExchanger == true)
+                                {
+                                    <span class="alert alert-success"> Payment Sent </span>
+                                }
+                                else
+                                {
+                                    <span class="alert alert-danger"> Pending</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

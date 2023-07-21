@@ -1,0 +1,123 @@
+﻿@model IEnumerable<DreamToEarn.DbModel.Team>
+
+@using System.Security.Claims;
+@using DreamToEarn.Helper;
+@{
+    var user = new AppUser(User as ClaimsPrincipal);
+
+    if (Session["SiteSessions"] == null)
+    {
+        Response.Redirect("/Account/Login");
+        Response.End();
+    }
+}
+
+@{
+    ViewBag.Title = "Commission Referrer";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+<section id="threeMonthPlan">
+    <div class="card-header">
+        <i class="fas fa-table mr-1"></i>
+        Referrer Team
+    </div>
+    <div class="card-body">
+        <form>
+            <div class="form-group">
+                <label class="label-default" for="ddlReferrer">Select Referrer</label>
+                @*@Html.DropDownList("Referrer", new SelectList(ViewBag.Ref, "UserId", "FirstName"), "Please select", new { @id = "ddlReferrer", @class="form-control bx-selection", @style="width: 320px;", onchange="reloadPage();"})*@
+                <select class="form-control bx-selection" id="ddlReferrer" style="width: 320px;" onchange="return reloadPage();">
+                    <option value="">Select Referrer</option>
+                    @foreach (var item in ViewBag.Ref as IEnumerable<DreamToEarn.DbModel.CommReferrer>)
+                    {
+                        var selected = "";
+                        if (item.UserId.ToDefaultString() == Request.QueryString["RefUserId"])
+                        {
+                            selected = "selected";
+                        }
+                        <option value="@item.UserId" @selected>@item.FirstName @item.LastName</option>
+
+                    }
+
+                </select>
+            </div>
+        </form>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table mr-1"></i>
+            Referrer Team
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>User Name</th>
+                            <th>Email</th>
+                            <th>Investment Plan</th>
+                            <th>Plan Type</th>
+                            <th>Plan Status</th>
+                            <th>Plan IsActive</th>
+                            <th>Referred By</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @item.FirstName @item.LastName
+                                </td>
+                                <td>
+                                    @item.UserName
+                                </td>
+                                <td>
+                                    @item.Email
+                                </td>
+                                <td>
+                                    @item.Plan / RS
+                                </td>
+                                <td>
+                                    @item.planType
+                                </td>
+                                <td>
+                                    @item.IsActive
+                                </td>
+                                <td>
+                                    @if (item.PlanStatus == "Approved")
+                                    {
+                                        <span class="text-success"> Approved</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-info"> Pending</span>
+                                    }
+                                </td>
+                                <td>
+                                    @item.ReferencedBy
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="lblmsg"></div>
+    <div id="snackbar"></div>
+</section>
+<script>
+    function reloadPage() {
+        var RefUserId = $('#ddlReferrer').val();
+        if (RefUserId == "") {
+            return false;
+        }
+        window.location = "/Commission/Index?RefUserId=" + RefUserId;
+    }
+
+</script>
+

@@ -1,0 +1,262 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DreamToEarnModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="DreamToEarnEntities1" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="ads" EntityType="DreamToEarnModel.ad" />
+    <EntitySet Name="Commissions" EntityType="DreamToEarnModel.Commission" />
+    <EntitySet Name="DrawAmounts" EntityType="DreamToEarnModel.DrawAmount" />
+    <EntitySet Name="DrawsDays" EntityType="DreamToEarnModel.DrawsDay" />
+    <EntitySet Name="EarningTranfers" EntityType="DreamToEarnModel.EarningTranfer" />
+    <EntitySet Name="InvestmentPlans" EntityType="DreamToEarnModel.InvestmentPlan" />
+    <EntitySet Name="Users" EntityType="DreamToEarnModel.User" />
+    <EntitySet Name="UsersAds" EntityType="DreamToEarnModel.UsersAd" />
+    <EntitySet Name="CommReferrers" EntityType="DreamToEarnModel.CommReferrer" />
+    <EntitySet Name="Teams" EntityType="DreamToEarnModel.Team" />
+    <EntitySet Name="UsersCommissions" EntityType="DreamToEarnModel.UsersCommission" />
+    <EntitySet Name="UsersDetails" EntityType="DreamToEarnModel.UsersDetail" />
+    <EntitySet Name="UsersWithdraws" EntityType="DreamToEarnModel.UsersWithdraw" />
+    <AssociationSet Name="FK_InvestmentPlan_InvestmentPlan" Association="DreamToEarnModel.FK_InvestmentPlan_InvestmentPlan">
+      <End Role="InvestmentPlan" EntitySet="InvestmentPlans" />
+      <End Role="InvestmentPlan1" EntitySet="InvestmentPlans" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="ad">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="adURL" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+    <Property Name="addeddate" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="Commission">
+    <Key>
+      <PropertyRef Name="ComId" />
+    </Key>
+    <Property Name="ComId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="planId" Type="Int32" Nullable="false" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="TotalCommission" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="ComDate" Type="DateTime" Precision="3" />
+    <Property Name="IsApproved" Type="Boolean" />
+    <Property Name="CommissionPercentage" Type="Int32" />
+  </EntityType>
+  <EntityType Name="DrawAmount">
+    <Key>
+      <PropertyRef Name="drawId" />
+    </Key>
+    <Property Name="drawId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="Int32" />
+    <Property Name="totalDraw" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="totalEarningOnDraw" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="drawDate" Type="DateTime" Precision="3" />
+    <Property Name="OTPTokens" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="drawStatus" Type="Boolean" />
+    <Property Name="isAdminApprove" Type="Boolean" />
+    <Property Name="Deductions" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="drawSentByExchanger" Type="Boolean" />
+    <Property Name="DrawType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DrawSentDate" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="DrawsDay">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstDay" Type="Int32" />
+    <Property Name="SecondDay" Type="Int32" />
+    <Property Name="ThirdDay" Type="Int32" />
+    <Property Name="ForthDay" Type="Int32" />
+  </EntityType>
+  <EntityType Name="EarningTranfer">
+    <Key>
+      <PropertyRef Name="TransferId" />
+    </Key>
+    <Property Name="TransferId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TransferAmount" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="TranferByUserId" Type="Int32" Nullable="false" />
+    <Property Name="TransFerToUserId" Type="Int32" Nullable="false" />
+    <Property Name="TotalEarningOnTransfer" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="TransferDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Comments" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="TransactionToken" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="InvestmentPlan">
+    <Key>
+      <PropertyRef Name="planId" />
+    </Key>
+    <Property Name="planId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="plan" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="planType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="planAddDate" Type="DateTime" Precision="3" />
+    <Property Name="planActiveDate" Type="DateTime" Precision="3" />
+    <Property Name="planStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="UserId" Type="Int32" />
+    <Property Name="TotalEarnings" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="InvestPercentage" Type="Int32" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="Commission" Type="Decimal" Precision="18" Scale="0" />
+    <NavigationProperty Name="InvestmentPlan1" Relationship="DreamToEarnModel.FK_InvestmentPlan_InvestmentPlan" FromRole="InvestmentPlan" ToRole="InvestmentPlan1" />
+    <NavigationProperty Name="InvestmentPlan2" Relationship="DreamToEarnModel.FK_InvestmentPlan_InvestmentPlan" FromRole="InvestmentPlan1" ToRole="InvestmentPlan" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="UserName" />
+    </Key>
+    <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="FirstName" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+    <Property Name="LastName" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+    <Property Name="Email" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="Password" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="RefUserId" Type="Int32" />
+    <Property Name="Role" Type="Int32" />
+    <Property Name="firstLoginToken" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="firstLogin" Type="Boolean" />
+    <Property Name="TransactionToken" Type="String" MaxLength="600" FixedLength="false" Unicode="false" />
+    <Property Name="SuperAdmin" Type="Boolean" />
+    <Property Name="TotalCommissions" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="UserAddress" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="Mobile" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="BankAccount" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="JazzCash" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="EasyPaisa" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="BankTitle" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="UsersAd">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="adId" Type="Int32" Nullable="false" />
+    <Property Name="IsViewed" Type="Boolean" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="forDate" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="CommReferrer">
+    <Key>
+      <PropertyRef Name="UserId" />
+      <PropertyRef Name="UserName" />
+      <PropertyRef Name="Password" />
+    </Key>
+    <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="FirstName" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+    <Property Name="LastName" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+    <Property Name="Email" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="Password" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="RefUserId" Type="Int32" />
+    <Property Name="Role" Type="Int32" />
+    <Property Name="firstLoginToken" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="firstLogin" Type="Boolean" />
+    <Property Name="TransactionToken" Type="String" MaxLength="600" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Team">
+    <Key>
+      <PropertyRef Name="UserId" />
+      <PropertyRef Name="UserName" />
+      <PropertyRef Name="Plan" />
+      <PropertyRef Name="planType" />
+      <PropertyRef Name="PlanStatus" />
+    </Key>
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="UserName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="FirstName" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+    <Property Name="LastName" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+    <Property Name="Email" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="RefUserId" Type="Int32" />
+    <Property Name="Role" Type="Int32" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="Plan" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="planType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="planAddDate" Type="DateTime" Precision="3" />
+    <Property Name="planActiveDate" Type="DateTime" Precision="3" />
+    <Property Name="PlanStatus" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ReferencedBy" Type="String" MaxLength="859" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="UsersCommission">
+    <Key>
+      <PropertyRef Name="ComId" />
+      <PropertyRef Name="UserId" />
+      <PropertyRef Name="UserName" />
+      <PropertyRef Name="CommissionPercentage" />
+      <PropertyRef Name="IsApproved" />
+    </Key>
+    <Property Name="ComId" Type="Int32" Nullable="false" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="UserName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="FirstName" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+    <Property Name="LastName" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+    <Property Name="Email" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="TotalCommission" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="CommissionOnPlan" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ComDate" Type="DateTime" Precision="3" />
+    <Property Name="CommissionPercentage" Type="Int32" Nullable="false" />
+    <Property Name="IsApproved" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UsersDetail">
+    <Key>
+      <PropertyRef Name="planId" />
+      <PropertyRef Name="UserId" />
+      <PropertyRef Name="UserName" />
+      <PropertyRef Name="TotalEarnings" />
+      <PropertyRef Name="InvestPercentage" />
+    </Key>
+    <Property Name="planId" Type="Int32" Nullable="false" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="UserName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="FirstName" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+    <Property Name="LastName" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+    <Property Name="Email" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="RefUserId" Type="Int32" />
+    <Property Name="Role" Type="Int32" />
+    <Property Name="plan" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="planType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="planAddDate" Type="DateTime" Precision="3" />
+    <Property Name="planActiveDate" Type="DateTime" Precision="3" />
+    <Property Name="planStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="TotalEarnings" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+    <Property Name="InvestPercentage" Type="Int32" Nullable="false" />
+    <Property Name="TransactionToken" Type="String" MaxLength="600" FixedLength="false" Unicode="false" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="ReferencedBy" Type="String" MaxLength="859" FixedLength="false" Unicode="false" />
+    <Property Name="TotalCommissionsx" Type="Decimal" Precision="21" Scale="2" />
+  </EntityType>
+  <EntityType Name="UsersWithdraw">
+    <Key>
+      <PropertyRef Name="drawID" />
+      <PropertyRef Name="UserName" />
+      <PropertyRef Name="Deductions" />
+      <PropertyRef Name="drawSentByExchanger" />
+      <PropertyRef Name="DrawType" />
+    </Key>
+    <Property Name="drawID" Type="Int32" Nullable="false" />
+    <Property Name="UserId" Type="Int32" />
+    <Property Name="UserName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="BankAccount" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="BankTitle" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="EasyPaisa" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="JazzCash" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="LastName" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+    <Property Name="FirstName" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+    <Property Name="totalDraw" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="totalEarningOnDraw" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="Deductions" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+    <Property Name="drawDate" Type="DateTime" Precision="3" />
+    <Property Name="drawStatus" Type="Boolean" />
+    <Property Name="isAdminApprove" Type="Boolean" />
+    <Property Name="drawSentByExchanger" Type="Boolean" Nullable="false" />
+    <Property Name="DrawType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DrawSentDate" Type="DateTime" Precision="3" />
+  </EntityType>
+  <Association Name="FK_InvestmentPlan_InvestmentPlan">
+    <End Type="DreamToEarnModel.InvestmentPlan" Role="InvestmentPlan" Multiplicity="1" />
+    <End Type="DreamToEarnModel.InvestmentPlan" Role="InvestmentPlan1" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="InvestmentPlan">
+        <PropertyRef Name="planId" />
+      </Principal>
+      <Dependent Role="InvestmentPlan1">
+        <PropertyRef Name="planId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

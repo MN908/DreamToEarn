@@ -1,0 +1,91 @@
+﻿@model IEnumerable<DreamToEarn.DbModel.Team>
+
+@using System.Security.Claims;
+@using DreamToEarn.Helper;
+@{
+    var user = new AppUser(User as ClaimsPrincipal);
+
+    if (Session["SiteSessions"] == null)
+    {
+        Response.Redirect("/Account/Login");
+        Response.End();
+    }
+}
+@{
+    ViewBag.Title = "View Team";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table mr-1"></i>
+        Team
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>User Name</th>
+                        <th>Email</th>
+                        <th>Investment Plan</th>
+                        <th>Plan Type</th>
+                        <th>Plan Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @item.FirstName @item.LastName
+                            </td>
+                            <td>
+                                @item.UserName
+                            </td>
+                            <td>
+                                @item.Email
+                            </td>
+                            <td>
+                                @if (item.Plan == "No Plan Yet")
+                                {
+                                    <span class="text-danger"> No Plan Yet</span>
+                                }
+                                else
+                                {
+                                    @item.Plan <span class="text-danger"> / RS </span>
+                                }
+                            </td>
+                            <td>
+                                @if (item.planType == "No Plan Yet")
+                                {
+                                    <span class="text-danger"> No Plan Yet</span>
+                                }
+                                else
+                                {
+                                    @item.planType
+                                }
+                            </td>
+                            <td>
+                                @if (item.PlanStatus == "Approved")
+                                {
+                                    <span class="text-success"> Approved</span>
+                                }
+                                else if (item.PlanStatus == "Pending")
+                                {
+                                    <span class="text-info"> Pending</span>
+                                }
+                                else
+                                {
+                                    <span class="text-danger"> No Plan Yet </span>
+                                }
+                            </td>                            
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,179 @@
+﻿@using System.Security.Claims;
+@using DreamToEarn.Helper;
+@{
+    var user = new AppUser(User as ClaimsPrincipal);
+
+    if (Session["SiteSessions"] == null)
+    {
+        Response.Redirect("/Account/Login");
+        Response.End();
+    }
+}
+
+@{
+    ViewBag.Title = "Set Draw days";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+<section>
+    <div>
+        <div class="card-header">
+            <i class="fas fa-table mr-1"></i>
+            Set Withdraw Days
+        </div>
+        <div class="container"></div>
+        <div class="border border-light">
+            <div class="card-body">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="mb-1" for="one">First Day</label>
+                            <select class=".1-30 form-control bx-selection" id="one" style="width: 320px;">
+                                @for (int i = 1; i <= 30; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="mb-1" for="two">Second Day</label>
+                            <select class=".1-30 form-control bx-selection" id="two" style="width: 320px;">
+                                @for (int i = 1; i <= 30; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="mb-1" for="three">Third Day</label>
+                            <select class=".1-30 form-control bx-selection" id="three" style="width: 320px;">
+                                @for (int i = 1; i <= 30; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="mb-1" for="four">Forth Day</label>
+                            <select class=".1-30 form-control bx-selection" id="four" style="width: 320px;">
+                                @for (int i = 1; i <= 30; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group mt-4 mb-0"><a class="btn btn-primary btn-block" href="#" onclick="return AddDrawDays();" style="width:180px">Add</a></div>
+                </div>
+                <div class="dropdown-divider"></div>
+                <table class="table">
+                    <tr>
+                        <td><b>First Withdraw Date </b></td>
+                        <td><b>Second Withdraw Date</b></td>
+                        <td><b>Third Withdraw Date</b></td>
+                        <td><b>Fourth Withdraw Date</b></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @if (ViewBag.dayOne == 0)
+                            {
+                                <span class="text-sm-center"> 01/@DateTime.Now.Month/@DateTime.Now.Year</span>
+                            }
+                            else
+                            {
+                                <span class="text-sm-center"> @ViewBag.dayOne/@DateTime.Now.Month/@DateTime.Now.Year</span>
+                            }
+                        </td>
+                        <td>
+                            @if (ViewBag.dayTwo == 0)
+                            {
+                                <span class="text-sm-center"> 01/@DateTime.Now.Month/@DateTime.Now.Year</span>
+                            }
+                            else
+                            {
+                                <span class="text-sm-center"> @ViewBag.dayTwo/@DateTime.Now.Month/@DateTime.Now.Year</span>
+                            }
+                        </td>
+                        <td>
+                            @if (ViewBag.dayThree == 0)
+                            {
+                                <span class="text-sm-center"> 01/@DateTime.Now.Month/@DateTime.Now.Year</span>
+                            }
+                            else
+                            {
+                                <span class="text-sm-center"> @ViewBag.dayThree/@DateTime.Now.Month/@DateTime.Now.Year</span>
+                            }
+                        </td>
+                        <td>
+                            @if (ViewBag.dayFour == 0)
+                            {
+                                <span class="text-sm-center"> 01/@DateTime.Now.Month/@DateTime.Now.Year</span>
+                            }
+                            else
+                            {
+                                <span class="text-sm-center"> @ViewBag.dayFour/@DateTime.Now.Month/@DateTime.Now.Year</span>
+                            }
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div id="lblmsg"></div>
+        </div>
+    </div>
+    <div id="snackbar"></div>
+</section>
+<script>
+
+
+    function AddDrawDays() {
+        var one = $('#one').val();
+        var two = $('#two').val();
+        var three = $('#three').val();
+        var four = $('#four').val();
+
+        var url = '@Url.Action("setDrawDates", "DrawAmount")';
+
+        $.ajax({
+        type: "POST",
+        url: url,
+            data: {
+                dayOne: one, dayTwo: two, dayThree: three, dayFour: four
+        },
+        success: function (result) {
+            if (result.IsSuccess) {
+                $("#lblmsg").removeClass("smail text-danger");
+                $("#lblmsg").addClass("small text-success");
+                document.getElementById('lblmsg').innerHTML = "Days updated";
+                ShowMessage('success', "days updated");
+                window.location.reload();
+            }
+            else {
+                $("#lblmsg").removeClass("small text-success");
+                $("#lblmsg").addClass("smail text-danger");
+                document.getElementById('lblmsg').innerHTML = result.Message;
+                ShowMessage('', result.Message);
+            }
+        },
+            error: function (jqXHR, status, err) {
+                $("#lblmsg").removeClass("small text-success");
+                $("#lblmsg").addClass("smail text-danger");
+                document.getElementById('lblmsg').innerHTML = "Can't able to fullfill request, please try later";
+                ShowMessage('', "Can't able to fullfill request, please try later");
+        }
+    });
+    }
+
+    function ShowMessage(type, message) {
+             var x = document.getElementById("snackbar");
+             x.className = "show";
+             x.innerHTML = message;
+              setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+        }
+</script>
+

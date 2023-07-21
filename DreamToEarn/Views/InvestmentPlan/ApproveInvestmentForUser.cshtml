@@ -1,0 +1,209 @@
+﻿@model IEnumerable<DreamToEarn.DbModel.UsersDetail>
+
+@using System.Security.Claims;
+@using DreamToEarn.Helper;
+@{
+    var user = new AppUser(User as ClaimsPrincipal);
+
+    if (Session["SiteSessions"] == null)
+    {
+        Response.Redirect("/Account/Login");
+        Response.End();
+    }
+}
+@{
+    ViewBag.Title = "ApproveInvestmentForUser";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table mr-1"></i>
+        Approve Plan
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>User Name</th>
+                        <th>Email</th>
+                        <th>Investment Plan</th>
+                        <th>Plan Type</th>
+                        <th>Plan Status</th>
+                        <th>Action</th>
+                        <th>Set Investmen Percentage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @item.FirstName @item.LastName
+                            </td>
+                            <td>
+                                @item.UserName
+                            </td>
+                            <td>
+                                @item.Email
+                            </td>
+                            <td>
+                                @item.plan /RS
+                            </td>
+                            <td>
+                                @item.planType
+                            </td>
+                            <td>
+                                @item.planStatus
+                            </td>
+                            <td>
+                                @if (item.planStatus == "Approved")
+                                {
+                                    <span class="small text-success"> Already Approved</span>
+                                }
+                                else
+                                {
+                                    <a href="#" onclick="return approvePlan(@item.UserId);">Approve</a>                                    
+                                    <span> | </span>
+                                    <a href="#" onclick="return InactivrPlan(@item.planId);">Inactive</a>
+                                }                                
+                            </td>
+                            <td>                                
+                                <input class="form-control py-4" id="investmentPercentage" type="number" placeholder="Enter Percentage in numbers" value="@item.InvestPercentage"/>
+                                <a href="#" onclick="return SetInvestmentPercentage(@item.UserId);" class="btn btn-primary btn-block">Set Percentage</a>
+                                <span class="small text-info">By default the investment percentage is 75%</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div id="lblmsg"></div>
+    </div>
+</div>
+<div id="snackbar"></div>
+<script>
+    function SetInvestmentPercentage(userId) {
+        var investPer = $('#investmentPercentage').val();
+        if (investPer == "") {
+            ShowMessage("", "Please enter investment.");
+            return;
+        }
+        var modelObj = {
+                //planAddDate: new date(),
+                InvestmentPercentage: investPer,
+                userId: userId
+            };
+            var url = '@Url.Action("UpdateInvestment", "InvestmentPlan")';
+             $.ajax({
+                type: "POST",
+                url: url,
+                data: { model: modelObj },
+                success: function (result) {
+                    if (result.IsSuccess) {
+                        ShowMessage('success', "Investment Plan percentage has been updated succesfully");
+                        $("#lblmsg").removeClass("small text-danger");
+                        $("#lblmsg").addClass("smail text-success");
+                        document.getElementById('lblmsg').innerHTML = "Investment Plan percentage has been updated succesfully";
+                        $('#ddlPlan').val('');
+                        window.location.reload();
+                    }
+                    else {
+                        ShowMessage('', "NOTE: " + result.Message);
+                        $("#lblmsg").removeClass("small text-success");
+                        $("#lblmsg").addClass("smail text-danger");
+                        document.getElementById('lblmsg').innerHTML = "NOTE: " + result.Message;
+                    }
+                },
+                error: function (jqXHR, status, err) {
+                    ShowMessage('', "NOTE: " + result.Message);
+                    $("#lblmsg").removeClass("small text-success");
+                    $("#lblmsg").addClass("smail text-danger");
+                    document.getElementById('lblmsg').innerHTML = "NOTE: " + result.Message;
+                }
+            });
+    }
+
+    function approvePlan(userId) {
+        if (!confirm('Are you sure you want to approve this Investment plan?')) {
+            return false;
+        }
+        var modelObj = {
+                //planAddDate: new date(),
+                planStatus: "Approved",
+                userId: userId
+            };
+            var url = '@Url.Action("ApproveInvestmentForUser", "InvestmentPlan")';
+             $.ajax({
+                type: "POST",
+                url: url,
+                data: { model: modelObj },
+                success: function (result) {
+                    if (result.IsSuccess) {
+                        ShowMessage('success', "Investment Plan has been approved succesfully");
+                        $("#lblmsg").removeClass("small text-danger");
+                        $("#lblmsg").addClass("smail text-success");
+                        document.getElementById('lblmsg').innerHTML = "Investment Plan has been approved succesfully";
+                        $('#ddlPlan').val('');
+                        window.location = "/Dashboard/Index";
+                    }
+                    else {
+                        ShowMessage('', "NOTE: " + result.Message);
+                        $("#lblmsg").removeClass("small text-success");
+                        $("#lblmsg").addClass("smail text-danger");
+                        document.getElementById('lblmsg').innerHTML = "NOTE: " + result.Message;
+                    }
+                },
+                error: function (jqXHR, status, err) {
+                    ShowMessage('', "NOTE: " + result.Message);
+                    $("#lblmsg").removeClass("small text-success");
+                    $("#lblmsg").addClass("smail text-danger");
+                    document.getElementById('lblmsg').innerHTML = "NOTE: " + result.Message;
+                }
+            });
+    }
+
+    function InactivrPlan(planId) {
+        if (!confirm('Are you sure you want to inactive this Investment plan?')) {
+            return false;
+        }        
+            var url = '@Url.Action("InactiveInvestmentForUser", "InvestmentPlan")';
+             $.ajax({
+                type: "POST",
+                url: url,
+                data: { planId: planId },
+                success: function (result) {
+                    if (result.IsSuccess) {
+                        ShowMessage('success', "Investment Plan has been approved succesfully");
+                        $("#lblmsg").removeClass("small text-danger");
+                        $("#lblmsg").addClass("smail text-success");
+                        document.getElementById('lblmsg').innerHTML = "Investment Plan has been approved succesfully";
+                        $('#ddlPlan').val('');
+                        window.location = "/Dashboard/Index";
+                    }
+                    else {
+                        ShowMessage('', "NOTE: " + result.Message);
+                        $("#lblmsg").removeClass("small text-success");
+                        $("#lblmsg").addClass("smail text-danger");
+                        document.getElementById('lblmsg').innerHTML = "NOTE: " + result.Message;
+                    }
+                },
+                error: function (jqXHR, status, err) {
+                    ShowMessage('', "NOTE: " + result.Message);
+                    $("#lblmsg").removeClass("small text-success");
+                    $("#lblmsg").addClass("smail text-danger");
+                    document.getElementById('lblmsg').innerHTML = "NOTE: " + result.Message;
+                }
+            });
+    }
+
+    function ShowMessage(type, message) {
+             var x = document.getElementById("snackbar");
+             x.className = "show";
+             x.innerHTML = message;
+              setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+        }
+</script>
+

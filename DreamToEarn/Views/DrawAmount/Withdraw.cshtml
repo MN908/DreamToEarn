@@ -1,0 +1,358 @@
+﻿@using System.Security.Claims;
+@using DreamToEarn.Helper;
+@{
+    var user = new AppUser(User as ClaimsPrincipal);
+
+    if (Session["SiteSessions"] == null)
+    {
+        Response.Redirect("/Account/Login");
+        Response.End();
+    }
+}
+
+@{
+    ViewBag.Title = "With draw";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+<section>
+    <div>
+        <div class="card-header">
+            <i class="fas fa-table mr-1"></i>
+            Withdraw Amount
+        </div>
+        @if (ViewBag.isWithdrawDate == "false")
+        {
+            <div class="container">
+                <div class="border border-light">
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="alert alert-danger">
+                                    <strong>You can not Withdraw today!</strong>
+                                    <label class="mb-1" id="withAmount">
+                                        Please wait for the next Withdraws dates
+                                        <span class="small text-info">
+                                            The withdraws dates are @ViewBag.dayOne/@DateTime.Now.Month/@DateTime.Now.Year, @ViewBag.dayTwo/@DateTime.Now.Month/@DateTime.Now.Year, @ViewBag.dayThree/@DateTime.Now.Month/@DateTime.Now.Year and @ViewBag.dayFour/@DateTime.Now.Month/@DateTime.Now.Year.
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="container">
+                <div class="border border-light" id="withdrawDiv">
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="col-md-4">
+                                <div class="alert alert-success">
+                                    <strong>Total Earnings</strong> <label class="mb-1" id="withAmount">@ViewBag.TotalEarnings</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="alert alert-info">
+                                    <strong>Total Commissions</strong> <label class="mb-1" id="withAmount">@ViewBag.TotalCommissions</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="alert alert-warning">
+                                    <strong>Total Balance</strong> <label class="mb-1" id="withAmount">@ViewBag.TotalBalance</label>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="alert alert-success alert-dismissible">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                    <strong>NOTE!</strong> Your total balance should be total of earning + total of commissions.
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table">
+                            <tr>
+                                <td><b>Bank Account and Title</b></td>
+                                <td><b>Jazz Cash</b></td>
+                                <td><b>Easy Paisa</b></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @if (ViewBag.BankAccount == "")
+                                    {
+                                        <span class="text-danger">No Account</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-success">@ViewBag.BankAccount - @ViewBag.BankTitle</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (ViewBag.JazzCash == "")
+                                    {
+                                        <span class="text-danger">No Account</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-success">@ViewBag.JazzCash</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (ViewBag.EasyPaisa == "")
+                                    {
+                                        <span class="text-danger">No Account</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-success">@ViewBag.EasyPaisa</span>
+                                    }
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="dropdown-divider"></div>
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="mb-1" for="drawType">Amount Draw Type</label><span class="small text-danger"> (Make sure you have added all related information for this)</span>
+                                    <select class="form-control bx-selection" id="drawType" style="width: 320px;">
+                                        <option value="">Choose your Draw Type</option>
+                                        <option value="BankAccount">Bank Account </option>
+                                        <option value="JazzCash">Jazz Cash</option>
+                                        <option value="EasyPaisa">Easy Paisa</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="mb-1" for="withdrawAmount">Draw Amount</label>
+                                    <input class="form-control py-4" id="withdrawAmount" type="text" placeholder="Withdraw Amount" onkeypress="return isNumberKey(event)" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="mb-1" for="withdrawAmount">Draw Date</label>
+                                    <input class="form-control py-4" id="withdrawdateDy" type="text" readonly value="@DateTime.Now.ToShortDateString()" style="width: 320px;" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="mb-1" for="withdrawAmount">Exchanger Name</label>
+                                    <input class="form-control py-4" id="withdrawdateDy" type="text" readonly value="@ViewBag.ExchangerName" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-divider"></div>
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="alert alert-danger alert-dismissible">
+                                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                        <strong>NOTE!</strong> 2.75 % will be deducted from your actual balance after withdraw.
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        @if (ViewBag.TotalBalance > 0)
+                        {
+                            <div class="form-group mt-4 mb-0"><a class="btn btn-primary btn-block" href="#" onclick="return withdrawAmount();" style="width:180px">Withdraw</a></div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-danger alert-dismissible">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>Insufficient Balance!</strong> You don not have much earnings. Please earn first and try again.
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="border border-light" id="OTPdiv" style="display:none">
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="col-md-4">
+                                <div class="alert alert-success">
+                                    <strong>Total Earnings</strong> <label class="mb-1" id="withAmount">@ViewBag.TotalEarnings</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="alert alert-info">
+                                    <strong>Total Commissions</strong> <label class="mb-1" id="withAmount">@ViewBag.TotalCommissions</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="alert alert-warning">
+                                    <strong>Total Balance</strong> <label class="mb-1" id="withAmount">@ViewBag.TotalBalance</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="mb-1" for="OTP">OTP</label>
+                                    <input class="form-control py-4" id="OTP" type="text" placeholder="Enter OTP" />
+                                </div>
+                            </div>
+                        </div>
+                        @if (ViewBag.TotalBalance > 0)
+                        {
+                            <div class="form-group mt-4 mb-0"><a class="btn btn-primary btn-block" href="#" onclick="return ConfirmWithdrawAmount();" style="width:180px">Confirm</a></div>
+                        }
+
+                        <div class="alert alert-danger alert-dismissible">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <strong>NOTE!</strong> After withdraw, your earnings amount (if any) set to zero and remaining balance will be updated in Total Commission.
+                        </div>
+                    </div>
+                </div>
+                <div id="lblmsg"></div>
+            </div>
+        }
+    </div>
+
+    <div id="snackbar"></div>
+</section>
+
+<script id="scr?@DateTime.Now.Ticks">
+    function isNumberKey(evt)
+       {
+          var charCode = (evt.which) ? evt.which : evt.keyCode;
+          if (charCode != 46 && charCode > 31
+            && (charCode < 48 || charCode > 57))
+             return false;
+
+          return true;
+    }
+
+    function withdrawAmount() {
+        var drawType = $('#drawType').val();
+        if (drawType == "") {
+            ShowMessage("", "Please select your draw type");
+            return false;
+        }
+        var amount = $('#withdrawAmount').val();
+        var totalBalance = @ViewBag.TotalBalance;
+        if (totalBalance == 0) {
+            ShowMessage("", "You do not have sufficient balance, try later");
+            return false;
+        }
+        if (amount == "") {
+            ShowMessage("", "Please enter amount to withdraw");
+            return false;
+        }
+        if (amount.trim() == "0") {
+            ShowMessage("", "Please enter amount greater than zero");
+            return false;
+        }
+
+        var url = '@Url.Action("Withdraw", "DrawAmount")';
+        var modelObj = {
+                UserId: @user.UserId,
+                totalDraw: amount,
+                totalEarningOnDraw: @ViewBag.TotalBalance,
+                earnings: @ViewBag.TotalEarnings,
+                commissions: @ViewBag.TotalCommissions,
+                drawType: drawType
+            };
+
+        $.ajax({
+        type: "POST",
+        url: url,
+        data: {
+            model: modelObj
+        },
+        success: function (result) {
+            if (result.IsSuccess) {
+                    $("#lblmsg").removeClass("smail text-danger");
+                $("#lblmsg").addClass("small text-success");
+                document.getElementById('lblmsg').innerHTML = "Please complete your amount withdraw, system send an OTP number to email, please copy and paste to confirm your transaction!";
+                ShowMessage('success', "Please complete your amount withdraw, system send an OTP number to email, please copy and paste to confirm your transaction!");
+                if (result.Message == "OTP sent") {
+                            $("#OTPdiv").show(200);
+                            $("#withdrawDiv").hide(200);
+                            return;
+                        }
+                //window.location.reload();
+            }
+            else {
+                $("#lblmsg").removeClass("small text-success");
+                $("#lblmsg").addClass("smail text-danger");
+                document.getElementById('lblmsg').innerHTML = result.Message;
+                ShowMessage('', result.Message);
+            }
+        },
+            error: function (jqXHR, status, err) {
+                $("#lblmsg").removeClass("small text-success");
+                $("#lblmsg").addClass("smail text-danger");
+                document.getElementById('lblmsg').innerHTML = "Can't able to change password, please try later";
+                ShowMessage('', "Can't able to fullfill request, please try later");
+        }
+    });
+
+    }
+
+    function ConfirmWithdrawAmount() {
+        var amount = $('#withdrawAmount').val();
+        var OTP = $('#OTP').val();
+        var totalBalance = @ViewBag.TotalBalance;
+
+        if (totalBalance == 0) {
+            ShowMessage("", "You do not have sufficient balance, try later");
+            return false;
+        }
+        if (OTP == 0) {
+            ShowMessage("", "Please enter OTP");
+            return false;
+        }
+        var url = '@Url.Action("VerifyOTPTokens", "DrawAmount")';
+        var modelObj = {
+                UserId: @user.UserId,
+                OTPTokens: OTP,
+                totalDraw: amount,
+                totalEarningOnDraw: @ViewBag.TotalBalance,
+                earnings: @ViewBag.TotalEarnings,
+                commissions: @ViewBag.TotalCommissions,
+            };
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: {
+                model: modelObj
+            },
+            success: function (result) {
+                if (result.IsSuccess) {
+                        $("#lblmsg").removeClass("smail text-danger");
+                        $("#lblmsg").addClass("small text-success");
+                        document.getElementById('lblmsg').innerHTML = "Please complete your amount withdraw, system send an OTP number to email, please copy and paste to confirm your transaction!";
+                        ShowMessage('success', "Please complete your amount withdraw, system send an OTP number to email, please copy and paste to confirm your transaction!");
+                        window.location = "/Dashboard/Index";
+                }
+                else {
+                    $("#lblmsg").removeClass("small text-success");
+                    $("#lblmsg").addClass("smail text-danger");
+                    document.getElementById('lblmsg').innerHTML = result.Message;
+                    ShowMessage('', result.Message);
+                }
+            },
+                error: function (jqXHR, status, err) {
+                    $("#lblmsg").removeClass("small text-success");
+                    $("#lblmsg").addClass("smail text-danger");
+                    document.getElementById('lblmsg').innerHTML = "Can't able to change password, please try later";
+                    ShowMessage('', "Can't able to fulfill request, please try again");
+            }
+        });
+
+}
+
+        function ShowMessage(type, message) {
+             var x = document.getElementById("snackbar");
+             x.className = "show";
+             x.innerHTML = message;
+              setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+        }
+</script>
+

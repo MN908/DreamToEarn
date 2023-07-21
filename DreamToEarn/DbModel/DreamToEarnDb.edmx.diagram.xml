@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="0d4fbc7dca9a476c9823f55692fb333a" Name="Diagram1" ZoomLevel="78">
+        <EntityTypeShape EntityType="DreamToEarnModel.ad" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DreamToEarnModel.Commission" Width="1.5" PointX="2.75" PointY="3.75" />
+        <EntityTypeShape EntityType="DreamToEarnModel.DrawAmount" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DreamToEarnModel.DrawsDay" Width="1.5" PointX="4.75" PointY="5.75" />
+        <EntityTypeShape EntityType="DreamToEarnModel.EarningTranfer" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DreamToEarnModel.InvestmentPlan" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DreamToEarnModel.User" Width="1.5" PointX="6.75" PointY="4.75" />
+        <EntityTypeShape EntityType="DreamToEarnModel.UsersAd" Width="1.5" PointX="0.75" PointY="7.75" />
+        <EntityTypeShape EntityType="DreamToEarnModel.CommReferrer" Width="1.5" PointX="8.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DreamToEarnModel.Team" Width="1.5" PointX="2.75" PointY="8.75" />
+        <EntityTypeShape EntityType="DreamToEarnModel.UsersCommission" Width="1.5" PointX="8.75" PointY="4.75" />
+        <EntityTypeShape EntityType="DreamToEarnModel.UsersDetail" Width="1.5" PointX="8.75" PointY="8.75" />
+        <EntityTypeShape EntityType="DreamToEarnModel.UsersWithdraw" Width="1.5" PointX="10.75" PointY="0.75" />
+        <AssociationConnector Association="DreamToEarnModel.FK_InvestmentPlan_InvestmentPlan" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

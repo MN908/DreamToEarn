@@ -1,0 +1,226 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="DreamToEarnModelStoreContainer" CdmEntityContainer="DreamToEarnEntities1">
+    <EntitySetMapping Name="ads">
+      <EntityTypeMapping TypeName="DreamToEarnModel.ad">
+        <MappingFragment StoreEntitySet="ads">
+          <ScalarProperty Name="addeddate" ColumnName="addeddate" />
+          <ScalarProperty Name="adURL" ColumnName="adURL" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Commissions">
+      <EntityTypeMapping TypeName="DreamToEarnModel.Commission">
+        <MappingFragment StoreEntitySet="Commission">
+          <ScalarProperty Name="CommissionPercentage" ColumnName="CommissionPercentage" />
+          <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+          <ScalarProperty Name="ComDate" ColumnName="ComDate" />
+          <ScalarProperty Name="TotalCommission" ColumnName="TotalCommission" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="planId" ColumnName="planId" />
+          <ScalarProperty Name="ComId" ColumnName="ComId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DrawAmounts">
+      <EntityTypeMapping TypeName="DreamToEarnModel.DrawAmount">
+        <MappingFragment StoreEntitySet="DrawAmount">
+          <ScalarProperty Name="DrawSentDate" ColumnName="DrawSentDate" />
+          <ScalarProperty Name="DrawType" ColumnName="DrawType" />
+          <ScalarProperty Name="drawSentByExchanger" ColumnName="drawSentByExchanger" />
+          <ScalarProperty Name="Deductions" ColumnName="Deductions" />
+          <ScalarProperty Name="isAdminApprove" ColumnName="isAdminApprove" />
+          <ScalarProperty Name="drawStatus" ColumnName="drawStatus" />
+          <ScalarProperty Name="OTPTokens" ColumnName="OTPTokens" />
+          <ScalarProperty Name="drawDate" ColumnName="drawDate" />
+          <ScalarProperty Name="totalEarningOnDraw" ColumnName="totalEarningOnDraw" />
+          <ScalarProperty Name="totalDraw" ColumnName="totalDraw" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="drawId" ColumnName="drawId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DrawsDays">
+      <EntityTypeMapping TypeName="DreamToEarnModel.DrawsDay">
+        <MappingFragment StoreEntitySet="DrawsDays">
+          <ScalarProperty Name="ForthDay" ColumnName="ForthDay" />
+          <ScalarProperty Name="ThirdDay" ColumnName="ThirdDay" />
+          <ScalarProperty Name="SecondDay" ColumnName="SecondDay" />
+          <ScalarProperty Name="FirstDay" ColumnName="FirstDay" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="EarningTranfers">
+      <EntityTypeMapping TypeName="DreamToEarnModel.EarningTranfer">
+        <MappingFragment StoreEntitySet="EarningTranfer">
+          <ScalarProperty Name="TransactionToken" ColumnName="TransactionToken" />
+          <ScalarProperty Name="Comments" ColumnName="Comments" />
+          <ScalarProperty Name="TransferDate" ColumnName="TransferDate" />
+          <ScalarProperty Name="TotalEarningOnTransfer" ColumnName="TotalEarningOnTransfer" />
+          <ScalarProperty Name="TransFerToUserId" ColumnName="TransFerToUserId" />
+          <ScalarProperty Name="TranferByUserId" ColumnName="TranferByUserId" />
+          <ScalarProperty Name="TransferAmount" ColumnName="TransferAmount" />
+          <ScalarProperty Name="TransferId" ColumnName="TransferId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="InvestmentPlans">
+      <EntityTypeMapping TypeName="DreamToEarnModel.InvestmentPlan">
+        <MappingFragment StoreEntitySet="InvestmentPlan">
+          <ScalarProperty Name="Commission" ColumnName="Commission" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="InvestPercentage" ColumnName="InvestPercentage" />
+          <ScalarProperty Name="TotalEarnings" ColumnName="TotalEarnings" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="planStatus" ColumnName="planStatus" />
+          <ScalarProperty Name="planActiveDate" ColumnName="planActiveDate" />
+          <ScalarProperty Name="planAddDate" ColumnName="planAddDate" />
+          <ScalarProperty Name="planType" ColumnName="planType" />
+          <ScalarProperty Name="plan" ColumnName="plan" />
+          <ScalarProperty Name="planId" ColumnName="planId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="DreamToEarnModel.User">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="BankTitle" ColumnName="BankTitle" />
+          <ScalarProperty Name="EasyPaisa" ColumnName="EasyPaisa" />
+          <ScalarProperty Name="JazzCash" ColumnName="JazzCash" />
+          <ScalarProperty Name="BankAccount" ColumnName="BankAccount" />
+          <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+          <ScalarProperty Name="UserAddress" ColumnName="UserAddress" />
+          <ScalarProperty Name="TotalCommissions" ColumnName="TotalCommissions" />
+          <ScalarProperty Name="SuperAdmin" ColumnName="SuperAdmin" />
+          <ScalarProperty Name="TransactionToken" ColumnName="TransactionToken" />
+          <ScalarProperty Name="firstLogin" ColumnName="firstLogin" />
+          <ScalarProperty Name="firstLoginToken" ColumnName="firstLoginToken" />
+          <ScalarProperty Name="Role" ColumnName="Role" />
+          <ScalarProperty Name="RefUserId" ColumnName="RefUserId" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UsersAds">
+      <EntityTypeMapping TypeName="DreamToEarnModel.UsersAd">
+        <MappingFragment StoreEntitySet="UsersAds">
+          <ScalarProperty Name="forDate" ColumnName="forDate" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="IsViewed" ColumnName="IsViewed" />
+          <ScalarProperty Name="adId" ColumnName="adId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CommReferrers">
+      <EntityTypeMapping TypeName="DreamToEarnModel.CommReferrer">
+        <MappingFragment StoreEntitySet="CommReferrer">
+          <ScalarProperty Name="TransactionToken" ColumnName="TransactionToken" />
+          <ScalarProperty Name="firstLogin" ColumnName="firstLogin" />
+          <ScalarProperty Name="firstLoginToken" ColumnName="firstLoginToken" />
+          <ScalarProperty Name="Role" ColumnName="Role" />
+          <ScalarProperty Name="RefUserId" ColumnName="RefUserId" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Teams">
+      <EntityTypeMapping TypeName="DreamToEarnModel.Team">
+        <MappingFragment StoreEntitySet="Team">
+          <ScalarProperty Name="ReferencedBy" ColumnName="ReferencedBy" />
+          <ScalarProperty Name="PlanStatus" ColumnName="PlanStatus" />
+          <ScalarProperty Name="planActiveDate" ColumnName="planActiveDate" />
+          <ScalarProperty Name="planAddDate" ColumnName="planAddDate" />
+          <ScalarProperty Name="planType" ColumnName="planType" />
+          <ScalarProperty Name="Plan" ColumnName="Plan" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="Role" ColumnName="Role" />
+          <ScalarProperty Name="RefUserId" ColumnName="RefUserId" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UsersCommissions">
+      <EntityTypeMapping TypeName="DreamToEarnModel.UsersCommission">
+        <MappingFragment StoreEntitySet="UsersCommissions">
+          <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+          <ScalarProperty Name="CommissionPercentage" ColumnName="CommissionPercentage" />
+          <ScalarProperty Name="ComDate" ColumnName="ComDate" />
+          <ScalarProperty Name="CommissionOnPlan" ColumnName="CommissionOnPlan" />
+          <ScalarProperty Name="TotalCommission" ColumnName="TotalCommission" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="ComId" ColumnName="ComId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UsersDetails">
+      <EntityTypeMapping TypeName="DreamToEarnModel.UsersDetail">
+        <MappingFragment StoreEntitySet="UsersDetail">
+          <ScalarProperty Name="TotalCommissionsx" ColumnName="TotalCommissionsx" />
+          <ScalarProperty Name="ReferencedBy" ColumnName="ReferencedBy" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="TransactionToken" ColumnName="TransactionToken" />
+          <ScalarProperty Name="InvestPercentage" ColumnName="InvestPercentage" />
+          <ScalarProperty Name="TotalEarnings" ColumnName="TotalEarnings" />
+          <ScalarProperty Name="planStatus" ColumnName="planStatus" />
+          <ScalarProperty Name="planActiveDate" ColumnName="planActiveDate" />
+          <ScalarProperty Name="planAddDate" ColumnName="planAddDate" />
+          <ScalarProperty Name="planType" ColumnName="planType" />
+          <ScalarProperty Name="plan" ColumnName="plan" />
+          <ScalarProperty Name="Role" ColumnName="Role" />
+          <ScalarProperty Name="RefUserId" ColumnName="RefUserId" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="planId" ColumnName="planId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UsersWithdraws">
+      <EntityTypeMapping TypeName="DreamToEarnModel.UsersWithdraw">
+        <MappingFragment StoreEntitySet="UsersWithdraws">
+          <ScalarProperty Name="DrawSentDate" ColumnName="DrawSentDate" />
+          <ScalarProperty Name="DrawType" ColumnName="DrawType" />
+          <ScalarProperty Name="drawSentByExchanger" ColumnName="drawSentByExchanger" />
+          <ScalarProperty Name="isAdminApprove" ColumnName="isAdminApprove" />
+          <ScalarProperty Name="drawStatus" ColumnName="drawStatus" />
+          <ScalarProperty Name="drawDate" ColumnName="drawDate" />
+          <ScalarProperty Name="Deductions" ColumnName="Deductions" />
+          <ScalarProperty Name="totalEarningOnDraw" ColumnName="totalEarningOnDraw" />
+          <ScalarProperty Name="totalDraw" ColumnName="totalDraw" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="JazzCash" ColumnName="JazzCash" />
+          <ScalarProperty Name="EasyPaisa" ColumnName="EasyPaisa" />
+          <ScalarProperty Name="BankTitle" ColumnName="BankTitle" />
+          <ScalarProperty Name="BankAccount" ColumnName="BankAccount" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="drawID" ColumnName="drawID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

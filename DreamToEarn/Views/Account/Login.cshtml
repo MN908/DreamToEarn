@@ -1,0 +1,179 @@
+﻿<section id="Login" class="Login">
+    <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+        </div>
+        <div id="layoutAuthentication">
+            <div id="layoutAuthentication_content">
+                <main>
+                    <div class="container" id="logindiv">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-5">
+                                <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Login</h3></div>
+                                    <div class="card-body">
+                                        <form>
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="EmailAddress">Email</label>
+                                                <input class="form-control py-4" id="EmailAddress" type="email" placeholder="Enter email address" autocomplete="off" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="Password">Password</label>
+                                                <input class="form-control py-4" id="Password" type="password" placeholder="Enter password" autocomplete="off" />
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input class="custom-control-input" id="rememberPasswordCheck" type="checkbox" />
+                                                    <label class="custom-control-label" for="rememberPasswordCheck">Remember password</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+                                                <a class="small" href="password.html">Forgot Password?</a>
+                                                <a class="btn btn-primary" onclick="return Login();">Login</a>
+                                            </div>
+                                            <div id="lblmsg" class="small danger" style="color: red;"></div>
+                                        </form>
+                                    </div>
+                                    <div class="card-footer text-center">
+                                        <div class="small"><a href="#">Need an account? Sign up!</a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container" id="FirstLogin" style="display:none">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-5">
+                                <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Login</h3></div>
+                                    <div class="card-body">
+                                        <form>
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="Token">Token</label>
+                                                <input class="form-control py-4" id="Token" type="password" placeholder="Enter Token" autocomplete="off" />
+                                                <label class="small mb-1" for="Token">Please enter token that were sent you at the time of Registration to your email.</label>
+                                            </div>
+                                            <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+                                                <a class="btn btn-primary" onclick="return TokenVarify();">Submit</a>
+                                            </div>
+                                            <div id="lblTokenMsg" class="small danger" style="color: red;"></div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+
+
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="../js/scripts.js"></script>
+        <link href="../css/styles.css" rel="stylesheet" />
+    </div>
+    <div id="snackbar"></div>
+</section>
+<script>
+    function TokenVarify() {
+         var url = '@Url.Action("TokenVarify", "Account")';
+         var Token = $("#Token").val();
+
+             $.ajax({
+                type: "POST",
+                url: url,
+                data: {
+                    Token: Token
+                },
+                success: function (result) {
+                    if (result.IsSuccess) {
+                        window.location = "/Dashboard/Index";
+                    }
+                    else {
+                        ShowMessage('', "The token you entered in expired or invalid, please try again");
+                        document.getElementById('lblTokenMsg').innerHTML = "The token you entered in expired or invalid, please try again";
+                    }
+                },
+                error: function (jqXHR, status, err) {
+                    ShowMessage('', "Can't able to varify token");
+                    document.getElementById('lblTokenMsg').innerHTML = "Can't able to varify token";
+                }
+            });
+    }
+    function Login() {
+        var url = '@Url.Action("Login", "Account")';
+        var email = $("#EmailAddress").val();
+        var pass = $("#EmailAddress").val();
+        if (email == "") {
+            ShowMessage("", "Please enter your Email");
+            return false;
+        }
+        if (pass == "") {
+            ShowMessage("", "Please enter your password");
+            return false;
+        }
+            var modelObj = {
+                EmailAddress: $("#EmailAddress").val(),
+                Password: $("#Password").val(),
+            };
+
+             $.ajax({
+                type: "POST",
+                url: url,
+                data: {
+                    Login: modelObj
+                },
+                success: function (result) {
+                    if (result.IsSuccess) {
+                        if (result.Message == "First Time login") {
+                            $("#FirstLogin").show(200);
+                            $("#logindiv").hide(200);
+                            return;
+                        }
+                        ShowMessage('success', "You Are Welecome!");
+                        $("#EmailAddress").val('');
+                        $("#Password").val('');
+                        window.location = "/Dashboard/Index";
+                    }
+                    else {
+                        ShowMessage('', "The Password or Email address is wrong, please try again");
+                        document.getElementById('lblmsg').innerHTML = "The Password or Email address is wrong, please try again";
+                    }
+                },
+                error: function (jqXHR, status, err) {
+                    ShowMessage('', "Can't able to create user");
+                }
+            });
+    }
+
+    function RememberMe() {
+        var email = CryptoJS.AES.encrypt($('#EmailAddress').val(), "KamKhan");
+        var PageId = CryptoJS.AES.encrypt($('#Password').val(), "KamKhan");
+        setCookie('EmailId', email);
+        setCookie('PageId', PageId);
+        setCookie('RemMeStatus', $('#chkRememberMe').is(":checked"));
+    }
+
+    function setCookie(cname, cvalue, exdays) {
+        if (exdays === undefined || exdays === null || exdays === '') {
+            exdays = 30;
+        }
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        var expires = "expires=" + d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+    function ShowMessage(type, message) {
+            ///// Get the snackbar DIV
+             var x = document.getElementById("snackbar");
+              // Add the "show" class to DIV
+             x.className = "show";
+             x.innerHTML = message;
+              // After 3 seconds, remove the show class from DIV
+              setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+        }
+</script>

@@ -1,0 +1,93 @@
+﻿@model IEnumerable<DreamToEarn.DbModel.UsersDetail>
+@{
+    ViewBag.Title = "AdjustInvestmentForUser";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+
+<section>
+    <div>
+        <div class="card-header">
+            <i class="fas fa-table mr-1"></i>
+            Add Ads
+        </div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="col-md-6">
+                    @foreach (var item in Model)
+                    {
+                        if (item.IsActive == true)
+                        {
+                            <div class="form-group">
+                                <label class="small mb-1" for="earnings">Adjust Earnings for @item.FirstName @item.LastName</label>
+                                <input class="form-control py-4" id="earnings" type="number" placeholder="Enter earnings" value="@item.TotalEarnings" />
+                                <label class="small text-danger" for="earnings">Please make sure before updating / Adjusting earning, it is not revertable</label>
+                                <input class="form-control py-4" id="userId" type="hidden" value="@item.UserId" />
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="form-group mt-4 mb-0"><a class="btn btn-primary btn-block" href="#" onclick="return AdjustEarnings();" style="width:280px">Adjust Investment</a></div>
+            <div id="lblmsg"></div>
+        </div>
+    </div>
+
+    <div id="snackbar"></div>
+</section>
+<script>
+    function AdjustEarnings() {
+            if (!confirm('Are you sure you want to Adjust earnings for this user?')) {
+                return false;
+            }
+            var earnings = $('#earnings').val();
+            var id = $("#userId").val();
+            if (earnings == "") {
+                ShowMessage("", "Please enter earnings");
+                return false;
+            }
+
+            var url = '@Url.Action("AdjustInvestmentForUser", "InvestmentPlan")';
+            var modelObj = {
+                totalEarnings: earnings,
+                userId: id
+            };
+
+             $.ajax({
+                type: "POST",
+                url: url,
+                data: {
+                    model: modelObj
+                },
+                success: function (result) {
+                    if (result.IsSuccess) {
+                         $("#lblmsg").removeClass("smail text-danger");
+                        $("#lblmsg").addClass("small text-success");
+                        document.getElementById('lblmsg').innerHTML = result.Message;
+                        ShowMessage('success', result.Message);
+                        window.location = "/dashboard/index";
+                    }
+                    else {
+                        $("#lblmsg").removeClass("small text-success");
+                        $("#lblmsg").addClass("smail text-danger");
+                        document.getElementById('lblmsg').innerHTML = result.Message;
+                        ShowMessage('', result.Message);
+                    }
+                },
+                 error: function (jqXHR, status, err) {
+                        $("#lblmsg").removeClass("small text-success");
+                        $("#lblmsg").addClass("smail text-danger");
+                        document.getElementById('lblmsg').innerHTML = "Can't able to change password, please try later";
+                        ShowMessage('', "Can't able to change password, please try later");
+                }
+            });
+
+    }
+    function ShowMessage(type, message) {
+             var x = document.getElementById("snackbar");
+             x.className = "show";
+             x.innerHTML = message;
+              setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+        }
+</script>
+

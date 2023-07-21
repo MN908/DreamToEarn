@@ -1,0 +1,166 @@
+﻿@model IEnumerable<DreamToEarn.DbModel.User>
+
+@using System.Security.Claims;
+@using DreamToEarn.Helper;
+@{
+    var user = new AppUser(User as ClaimsPrincipal);
+
+    if (Session["SiteSessions"] == null)
+    {
+        Response.Redirect("/Account/Login");
+        Response.End();
+    }
+}
+
+@{
+    ViewBag.Title = "Exchangers";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+<section id="threeMonthPlan">
+    <div class="card-header">
+        <i class="fas fa-table mr-1"></i>
+        Exchanger Team
+    </div>
+    <div class="card-body">
+        <form>
+            <div class="form-group">
+                <label class="label-default" for="ddlReferrer">Select User</label>
+                @*@Html.DropDownList("Referrer", new SelectList(ViewBag.Ref, "UserId", "FirstName"), "Please select", new { @id = "ddlReferrer", @class="form-control bx-selection", @style="width: 320px;", onchange="reloadPage();"})*@
+                <select class="form-control bx-selection" id="ddlUser" style="width: 320px;">
+                    <option value="">Select User</option>
+                    @foreach (var item in ViewBag.Users as IEnumerable<DreamToEarn.DbModel.User>)
+                    {
+                        <option value="@item.UserId">@item.FirstName @item.LastName</option>
+
+                    }
+
+                </select>
+            </div>
+            <div class="form-group">
+                <div class="form-group mt-4 mb-0"><a class="btn btn-primary btn-block" onclick="return setExchanger();" style="width: 200px;">Set Exchanger</a></div>
+                <div class="small"></div>
+                <div id="lblmsg"></div>
+            </div>
+        </form>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table mr-1"></i>
+            Referrer Team
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>User Name</th>
+                            <th>Email</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @item.FirstName @item.LastName
+                                </td>
+                                <td>
+                                    @item.UserName
+                                </td>
+                                <td>
+                                    @item.Email
+                                </td>
+                                <td>
+                                    <a onclick="return removeExchanger(@item.UserId);" class="small text-info" style="cursor: pointer;">Remove Exchanger </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="lblmsg"></div>
+    <div id="snackbar"></div>
+</section>
+<script>
+    function setExchanger() {
+        var UserId = $('#ddlUser').val();
+            if (UserId == "") {
+                ShowMessage("", "Please Select User from list");
+                return false;
+        }
+
+            var url = '@Url.Action("SetExchanger", "Exchanger")';
+             $.ajax({
+                type: "POST",
+                url: url,
+                data: { UserId: UserId },
+                success: function (result) {
+                    if (result.IsSuccess) {
+                        ShowMessage('success', result.Message);
+                        $("#lblmsg").removeClass("small text-danger");
+                        $("#lblmsg").addClass("smail text-success");
+                        document.getElementById('lblmsg').innerHTML = result.Message;                        
+                        window.location.reload();
+                    }
+                    else {
+                        ShowMessage('', "NOTE: " + result.Message);
+                        $("#lblmsg").removeClass("small text-success");
+                        $("#lblmsg").addClass("smail text-danger");
+                        document.getElementById('lblmsg').innerHTML = "NOTE: " + result.Message;
+                    }
+                },
+                error: function (jqXHR, status, err) {
+                    ShowMessage('', "NOTE: " + result.Message);
+                    $("#lblmsg").removeClass("small text-success");
+                    $("#lblmsg").addClass("smail text-danger");
+                    document.getElementById('lblmsg').innerHTML = "NOTE: " + result.Message;
+                }
+            });
+
+    }
+
+    function removeExchanger(userId) {        
+            var url = '@Url.Action("RemoveExchanger", "Exchanger")';
+             $.ajax({
+                type: "POST",
+                url: url,
+                data: { UserId: userId },
+                success: function (result) {
+                    if (result.IsSuccess) {
+                        ShowMessage('success', result.Message);
+                        $("#lblmsg").removeClass("small text-danger");
+                        $("#lblmsg").addClass("smail text-success");
+                        document.getElementById('lblmsg').innerHTML = result.Message;                        
+                        window.location.reload();
+                    }
+                    else {
+                        ShowMessage('', "NOTE: " + result.Message);
+                        $("#lblmsg").removeClass("small text-success");
+                        $("#lblmsg").addClass("smail text-danger");
+                        document.getElementById('lblmsg').innerHTML = "NOTE: " + result.Message;
+                    }
+                },
+                error: function (jqXHR, status, err) {
+                    ShowMessage('', "NOTE: " + result.Message);
+                    $("#lblmsg").removeClass("small text-success");
+                    $("#lblmsg").addClass("smail text-danger");
+                    document.getElementById('lblmsg').innerHTML = "NOTE: " + result.Message;
+                }
+            });
+
+        }
+
+
+        function ShowMessage(type, message) {
+             var x = document.getElementById("snackbar");
+             x.className = "show";
+             x.innerHTML = message;
+              setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+        }
+</script>

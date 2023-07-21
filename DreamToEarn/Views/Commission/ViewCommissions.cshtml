@@ -1,0 +1,139 @@
+﻿@model IEnumerable<DreamToEarn.DbModel.UsersCommission>
+
+@using System.Security.Claims;
+@using DreamToEarn.Helper;
+@{
+    var user = new AppUser(User as ClaimsPrincipal);
+
+    if (Session["SiteSessions"] == null)
+    {
+        Response.Redirect("/Account/Login");
+        Response.End();
+    }
+}
+
+
+@{
+    ViewBag.Title = "View Commissions";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table mr-1"></i>
+        Referrer Team
+    </div>
+    <div class="form-group mt-4 mb-0"><a class="btn btn-primary btn-block pull-right" onclick="return PDFExport()" style="width: 120px; padding:10px">View Commission</a></div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>User Name</th>
+                        <th>Email</th>
+                        <th>Investment Plan</th>
+                        <th>Total Commission</th>
+                        <th>Commission Date</th>
+                        @if (user.Role == "1")
+                        {
+                            <th>Commission Status</th>
+                        }
+                        <th>Commission Percentage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                    <tr>
+                        <td>
+                            @item.FirstName @item.LastName
+                        </td>
+                        <td>
+                            @item.UserName
+                        </td>
+                        <td>
+                            @item.Email
+                        </td>
+                        <td>
+                            @item.CommissionOnPlan / RS
+                        </td>
+                        <td>
+                            @item.TotalCommission
+                        </td>
+                        <td>
+                            @item.ComDate
+                        </td>
+                        @if (user.Role == "1")
+                        {
+                            <td>
+                                @if (item.IsApproved == true)
+                                {
+                                    <span class="text-success"> Approved</span>
+                                }
+                                else
+                                {
+                                    <a href="" onclick="return approveCommission(@item.ComId)" class="small text-info">Approve? </a>
+                                }
+                            </td>
+                        }
+                        <td>
+                            @item.CommissionPercentage
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+            <div id="lblmsg"></div>
+            <div id="snackbar"></div>
+        </div>
+    </div>
+</div>
+<script>
+    function approveCommission(ComId) {
+        if (!confirm('Are you sure you want to approve this Commission?')) {
+            return false;
+        }
+            var url = '@Url.Action("ApproveCommission", "Commission")';
+             $.ajax({
+                type: "POST",
+                url: url,
+                data: { ComId: ComId },
+                success: function (result) {
+                    if (result.IsSuccess) {
+                        ShowMessage('success', result.Message);
+                        $("#lblmsg").removeClass("small text-danger");
+                        $("#lblmsg").addClass("smail text-success");
+                        document.getElementById('lblmsg').innerHTML = result.Message;
+                        $('#ddlPlan').val('');
+                        window.location = "/Dashboard/Index";
+                    }
+                    else {
+                        ShowMessage('', "NOTE: " + result.Message);
+                        $("#lblmsg").removeClass("small text-success");
+                        $("#lblmsg").addClass("smail text-danger");
+                        document.getElementById('lblmsg').innerHTML = "NOTE: " + result.Message;
+                    }
+                },
+                error: function (jqXHR, status, err) {
+                    ShowMessage('', "NOTE: " + result.Message);
+                    $("#lblmsg").removeClass("small text-success");
+                    $("#lblmsg").addClass("smail text-danger");
+                    document.getElementById('lblmsg').innerHTML = "NOTE: " + result.Message;
+                }
+            });
+    }
+   
+     function ShowMessage(type, message) {
+             var x = document.getElementById("snackbar");
+             x.className = "show";
+             x.innerHTML = message;
+              setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+     }
+
+     function PDFExport()
+     {
+         alert("Name : _   , UserName : _ , Email : _ , Investment Plan : _ , Total Comission : _ , Commission Date  : _ , Comssion Status : _ , Comssion Percentage : _");
+     }
+</script>
+

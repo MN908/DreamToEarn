@@ -1,0 +1,92 @@
+﻿@model IEnumerable<DreamToEarn.PartialClasses.TodayAds>
+@using System.Security.Claims;
+@using DreamToEarn.Helper;
+@{
+    var user = new AppUser(User as ClaimsPrincipal);
+
+    if (Session["SiteSessions"] == null)
+    {
+        Response.Redirect("/Account/Login");
+        Response.End();
+    }
+}
+@{
+    ViewBag.Title = "View Ads";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+<section>
+    <div>
+        <div class="card-header">
+            <i class="fas fa-table mr-1"></i>
+            View Ads
+        </div>        
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>View Today Ads</th>                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <a href="https://@item.adURL" target="_blank" onclick="return DiableAd(@item.Id);">@item.adURL</a>
+                                </td>                                                             
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div id="lblmsg"></div>
+        </div>
+    </div>
+    
+    <div id="snackbar"></div>
+</section>
+
+<script>
+    
+    function DiableAd(id) {        
+            var url = '@Url.Action("disableAds", "Ads")';           
+             $.ajax({
+                type: "POST",
+                url: url,
+                data: {
+                   Id: id
+                },
+                success: function (result) {
+                    if (result.IsSuccess) {
+                         $("#lblmsg").removeClass("smail text-danger");
+                        $("#lblmsg").addClass("small text-success");
+                        document.getElementById('lblmsg').innerHTML = result.Message;
+                        ShowMessage('success', result.Message);
+                        window.location.reload();
+                    }
+                    else {
+                        $("#lblmsg").removeClass("small text-success");
+                        $("#lblmsg").addClass("smail text-danger");
+                        document.getElementById('lblmsg').innerHTML = result.Message;
+                        ShowMessage('', result.Message);
+                    }
+                },
+                 error: function (jqXHR, status, err) {
+                        $("#lblmsg").removeClass("small text-success");
+                        $("#lblmsg").addClass("smail text-danger");
+                        document.getElementById('lblmsg').innerHTML = "Can't able to change password, please try later";
+                        ShowMessage('', "Can't able to change password, please try later");
+                }
+            });
+
+        }
+    
+
+        function ShowMessage(type, message) {
+             var x = document.getElementById("snackbar");
+             x.className = "show";
+             x.innerHTML = message;
+              setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+        }
+</script>

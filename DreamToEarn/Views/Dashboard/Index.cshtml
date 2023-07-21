@@ -1,0 +1,305 @@
+﻿@model IEnumerable<DreamToEarn.DbModel.UsersDetail>
+
+@using System.Security.Claims;
+@using DreamToEarn.Helper;
+@{
+    var user = new AppUser(User as ClaimsPrincipal);
+
+    if (Session["SiteSessions"] == null)
+    {
+        Response.Redirect("/Account/Login");
+        Response.End();
+    }
+}
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <h1 class="mt-4">
+        @if (user.Role == "1")
+        {
+            <span>Admin</span>
+        }
+        else if (user.Role == "2")
+        {
+            <span>Investor</span>
+        }
+        else
+        {
+            <span>Exchanger</span>
+        }
+        Dashboard
+    </h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">Reference Name: http://dreamsofearn.com/Account/Register?ref=@user.UserName</li>
+    </ol>
+    @if (ViewBag.Address == "" || ViewBag.Mobile == "" || ViewBag.Address == null || ViewBag.Mobile == null)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-danger alert-dismissible">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>NOTE!</strong> Please update your profile.
+                </div>
+            </div>
+        </div>
+    }
+    <div class="row">
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-primary text-white mb-4">
+                <div class="card-body">Total Earnings</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    @*<a class="small text-white stretched-link" href="#">View Details</a>*@
+                    <div class="small text-white">@ViewBag.TotalEarnings /RS</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-warning text-white mb-4">
+                <div class="card-body">Total Team Members</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    @*<a class="small text-white stretched-link" href="#">View Details</a>*@
+                    <div class="small text-white">@ViewBag.TotalTeamMember Members</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-success text-white mb-4">
+                <div class="card-body">Investment Total Days Left</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    @*<a class="small text-white stretched-link" href="#">View Details</a>*@
+                    <div class="small text-white"> @ViewBag.TotalDaysLeft Days left</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-danger text-white mb-4">
+                <div class="card-body">Total Transfered Amount</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    @*<a class="small text-white stretched-link" href="#">View Details</a>*@
+                    <div class="small text-white">0 /RS</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-primary text-white mb-4">
+                <div class="card-body">Total Investment Amount</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    @*<a class="small text-white stretched-link" href="#">View Details</a>*@
+                    <div class="small text-white">@ViewBag.InvestmentAmount /RS</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-warning text-white mb-4">
+                <div class="card-body">Total Commission Amount</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    @*<a class="small text-white stretched-link" href="#">View Details</a>*@
+                    <div class="small text-white">@ViewBag.ApproveCommission /RS</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-success text-white mb-4">
+                <div class="card-body">Total Commission Amount (Pending)</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    @*<a class="small text-white stretched-link" href="#">View Details</a>*@
+                    <div class="small text-white">@ViewBag.PendingCommission /RS</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-danger text-white mb-4">
+                <div class="card-body">Total Earning + Commission Amount</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    @*<a class="small text-white stretched-link" href="#">View Details</a>*@
+                    <div class="small text-white">@ViewBag.EarningCommission /RS</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*<div class="row">
+            <div class="col-xl-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-chart-area mr-1"></i>
+                        Area Chart Example
+                    </div>
+                    <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-chart-bar mr-1"></i>
+                        Bar Chart Example
+                    </div>
+                    <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
+                </div>
+            </div>
+        </div>*@
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table mr-1"></i>
+            All Users
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>User Name</th>
+                            <th>Email</th>
+                            <th>Investment Plan</th>
+                            <th>Plan Type</th>
+                            <th>Plan Percentage</th>
+                            <th>Plan Add Date</th>
+                            <th>Plan Acitve Date</th>
+                            <th>Plan Is Acitve</th>
+                            <th>Plan Status</th>
+                            <th>Total Balance</th>
+                            <th>Reference By</th>
+                            @if (user.IsInRole("1"))
+                            {
+                                <th>Action</th>
+                                <th>Adjust Earnings</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @item.FirstName @item.LastName
+                                </td>
+                                <td>
+                                    @item.UserName
+                                </td>
+                                <td>
+                                    @item.Email
+                                </td>
+                                <td>
+                                    @item.plan / RS
+                                </td>
+                                <td>
+                                    @item.planType
+                                </td>
+                                <td>
+                                    @item.InvestPercentage %
+                                </td>
+                                <td>
+                                    @item.planAddDate
+                                </td>
+                                <td>
+                                    @item.planActiveDate
+                                </td>
+                                <td>
+                                    @if (@item.IsActive == true)
+                                    {
+                                        <span class="small text-success">
+                                            Plan is Active
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="small text-danger">
+                                            Plan is inactive
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.planStatus == "Approved")
+                                    {
+                                        <span class="text-success"> Approved</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-info"> Pending</span>
+                                    }
+                                </td>
+                                <td>
+                                    @item.TotalCommissionsx
+                                </td>
+                                <td>
+                                    @item.ReferencedBy
+                                </td>
+                                @if (user.IsInRole("1"))
+                                {
+                                    <td>
+
+                                        @if (item.planStatus == "Approved")
+                                        {
+                                            <a href="/InvestmentPlan/ApproveInvestmentForUser?userId=@item.UserId" class="small text-success">Set Plan Percentage </a>
+                                        }
+                                        else
+                                        {
+                                            <a href="/InvestmentPlan/ApproveInvestmentForUser?userId=@item.UserId" class="small text-info">Approve </a>
+                                        }
+                                        | <a href="" onclick="return removePlan(@item.UserId)" class="small text-danger"> Remove Plan</a>
+                                    </td>
+                                    <td>
+                                        <a href="/InvestmentPlan/AdjustInvestmentForUser?userId=@item.UserId" class="small text-info" title="Adjust Earnings">Adjust Earnings</a>
+                                    </td>
+
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="lblmsg"></div>
+<div id="snackbar"></div>
+
+<script>
+    function removePlan(userId) {
+        if (!confirm('Are you sure you want to remove this Investment plan?')) {
+            return false;
+        }
+        var modelObj = {
+                planStatus: "Approved",
+                userId: userId
+            };
+            var url = '@Url.Action("DeleteInvestmentForUser", "InvestmentPlan")';
+             $.ajax({
+                type: "POST",
+                url: url,
+                data: { model: modelObj },
+                success: function (result) {
+                    if (result.IsSuccess) {
+                        ShowMessage('success', "Investment Plan has been approved succesfully");
+                        $("#lblmsg").removeClass("small text-danger");
+                        $("#lblmsg").addClass("smail text-success");
+                        document.getElementById('lblmsg').innerHTML = "Investment Plan has been approved succesfully";
+                        $('#ddlPlan').val('');
+                        window.location = "/Dashboard/Index";
+                    }
+                    else {
+                        ShowMessage('', "NOTE: " + result.Message);
+                        $("#lblmsg").removeClass("small text-success");
+                        $("#lblmsg").addClass("smail text-danger");
+                        document.getElementById('lblmsg').innerHTML = "NOTE: " + result.Message;
+                    }
+                },
+                error: function (jqXHR, status, err) {
+                    ShowMessage('', "NOTE: " + result.Message);
+                    $("#lblmsg").removeClass("small text-success");
+                    $("#lblmsg").addClass("smail text-danger");
+                    document.getElementById('lblmsg').innerHTML = "NOTE: " + result.Message;
+                }
+            });
+    }
+
+    function ShowMessage(type, message) {
+             var x = document.getElementById("snackbar");
+             x.className = "show";
+             x.innerHTML = message;
+              setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+        }
+</script>

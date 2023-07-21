@@ -1,0 +1,106 @@
+﻿@model IEnumerable<DreamToEarn.DbModel.UsersWithdraw>
+
+@using System.Security.Claims;
+@using DreamToEarn.Helper;
+@{
+    var user = new AppUser(User as ClaimsPrincipal);
+
+    if (Session["SiteSessions"] == null)
+    {
+        Response.Redirect("/Account/Login");
+        Response.End();
+    }
+}
+
+@{
+    ViewBag.Title = "Draw History";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table mr-1"></i>
+         Withdraw History
+    </div>    
+    <div class="card-body">
+        <div class="row">
+            <div class="col-xl-6 col-md-6">
+                <div class="card bg-primary text-white mb-6">
+                    <div class="card-body">Total Withdraws (YTD)</div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <div class="small text-white">@ViewBag.totalYTDWithdraw /RS</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6 col-md-6">
+                <div class="card bg-warning text-white mb-6">
+                    <div class="card-body">Last Withdraws</div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <div class="small text-white">@ViewBag.lastWithDraw /RS</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">                
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>User Name</th>
+                        <th>Total Balance On Draw</th>
+                        <th>Total Withdraw</th>
+                        <th>Total Deductions</th>
+                        <th>With Draw Date</th>
+                        <th>Draw Type</th>
+                        <th>Account</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @item.FirstName @item.LastName
+                            </td>
+                            <td>
+                                @item.UserName
+                            </td>
+                            <td>
+                                @item.totalEarningOnDraw /RS
+                            </td>
+                            <td>
+                                @item.totalDraw /RS
+                            </td>
+                            <td>
+                                @item.Deductions / RS
+                            </td>
+                            <td>
+                                @Convert.ToDateTime(item.drawDate).ToShortDateString();
+                            </td>
+                            <td>
+                                @item.DrawType
+                            </td>
+                            <td>
+                                @if (item.DrawType == "EasyPaisa")
+                                {
+                                    <span> @item.EasyPaisa</span>
+                                }
+                                @if (item.DrawType == "JazzCash")
+                                {
+                                    <span> @item.JazzCash</span>
+                                }
+                                @if (item.DrawType == "BankAccount")
+                                {
+                                    <span> @item.BankAccount -  @item.BankTitle</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
