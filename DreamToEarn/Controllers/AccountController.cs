@@ -13,6 +13,8 @@ using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
 using DreamToEarn.Helper;
+using System.Web;
+using System.Web.UI;
 
 namespace DreamToEarn.Controllers
 {
